@@ -1,0 +1,422 @@
+{
+  "last_node_id": 34,
+  "last_link_id": 48,
+  "nodes": [
+    {
+      "id": 29,
+      "type": "Bedrock - SDXL",
+      "pos": [
+        1251,
+        368
+      ],
+      "size": {
+        "0": 400,
+        "1": 268
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 47,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            33
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - SDXL"
+      },
+      "widgets_values": [
+        "",
+        "1024 x 1024",
+        "cinematic",
+        6.978,
+        20,
+        "NONE",
+        "Auto",
+        0,
+        "fixed"
+      ]
+    },
+    {
+      "id": 33,
+      "type": "PreviewImage",
+      "pos": [
+        1701.8984375,
+        650.9765625
+      ],
+      "size": {
+        "0": 395.65234375,
+        "1": 415.90234375
+      },
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 41
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 32,
+      "type": "Bedrock - Titan Image",
+      "pos": [
+        1699.7958090311772,
+        368.64602020487723
+      ],
+      "size": {
+        "0": 400,
+        "1": 220.00001525878906
+      },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 48,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            41
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - Titan Image"
+      },
+      "widgets_values": [
+        "",
+        1,
+        "premium",
+        "1024 x 1024",
+        8,
+        0,
+        "fixed"
+      ]
+    },
+    {
+      "id": 27,
+      "type": "PreviewImage",
+      "pos": [
+        1254,
+        677
+      ],
+      "size": {
+        "0": 395.65234375,
+        "1": 415.90234375
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 33
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 8,
+      "type": "ShowText|pysssss",
+      "pos": [
+        824,
+        904
+      ],
+      "size": {
+        "0": 367.124755859375,
+        "1": 159.00286865234375
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 46,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "shape": 6,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "",
+        "A playful puppy with a soft, fluffy coat frolics in a lush, verdant meadow, its bright eyes filled with curiosity and its tail wagging joyfully as it explores the vibrant, sun-dappled landscape."
+      ]
+    },
+    {
+      "id": 23,
+      "type": "Prompt Template",
+      "pos": [
+        820.4378327684955,
+        369.0918288922683
+      ],
+      "size": {
+        "0": 376.08880615234375,
+        "1": 212.24671936035156
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 17,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            45
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Prompt Template"
+      },
+      "widgets_values": [
+        "",
+        "Describe a beautiful picture in detail using one sentence of \"[prompt]\", please answer in English words only, skip the preamble."
+      ]
+    },
+    {
+      "id": 34,
+      "type": "Bedrock - Claude",
+      "pos": [
+        825,
+        632
+      ],
+      "size": [
+        364.671875,
+        196
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 45,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            46,
+            47,
+            48
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - Claude"
+      },
+      "widgets_values": [
+        "",
+        "anthropic.claude-3-haiku-20240307-v1:0",
+        200,
+        0.5,
+        1,
+        250
+      ]
+    },
+    {
+      "id": 5,
+      "type": "Text Multiline",
+      "pos": [
+        362,
+        368
+      ],
+      "size": {
+        "0": 379.65625,
+        "1": 198.87109375
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            17
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Text Multiline"
+      },
+      "widgets_values": [
+        "一只小狗"
+      ]
+    }
+  ],
+  "links": [
+    [
+      17,
+      5,
+      0,
+      23,
+      0,
+      "STRING"
+    ],
+    [
+      33,
+      29,
+      0,
+      27,
+      0,
+      "IMAGE"
+    ],
+    [
+      41,
+      32,
+      0,
+      33,
+      0,
+      "IMAGE"
+    ],
+    [
+      45,
+      23,
+      0,
+      34,
+      0,
+      "STRING"
+    ],
+    [
+      46,
+      34,
+      0,
+      8,
+      0,
+      "STRING"
+    ],
+    [
+      47,
+      34,
+      0,
+      29,
+      0,
+      "STRING"
+    ],
+    [
+      48,
+      34,
+      0,
+      32,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "Bedrock - Cluade",
+      "bounding": [
+        810,
+        295,
+        396,
+        790
+      ],
+      "color": "#b58b2a",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Bedrock - TitanImage",
+      "bounding": [
+        1690,
+        295,
+        420,
+        782
+      ],
+      "color": "#88A",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Bedrock - SDXL",
+      "bounding": [
+        1241,
+        294,
+        422,
+        814
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "locked": false
+    }
+  ],
+  "config": {},
+  "extra": {
+    "workspace_info": {
+      "id": "c350a89c-0edd-4bef-9fc6-f83c239228a8"
+    }
+  },
+  "version": 0.4
+}

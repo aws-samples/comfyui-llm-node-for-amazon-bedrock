@@ -1,0 +1,113 @@
+# https://s3.us-east-1.amazonaws.com/cf-templates-vjd79wfufmbo-us-east-1/2024-01-13T055853.062Zujj-comfyui.yaml
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Sagemaker Jupyter Notebook for ComfyUI
+Parameters : 
+  InstanceType: 
+    Description : SageMaker EC2 instance type
+    Type : String
+    Default : ml.g5.2xlarge
+    AllowedValues :
+           - ml.g5.2xlarge
+           - ml.g5.4xlarge
+           - ml.g5.8xlarge
+    ConstraintDescription : Must be a valid EC2 instance type 
+  Volume:
+    Type: String
+    Description: Enter number of volume size(GB)
+    Default: 200
+
+Resources:
+  ExecutionRole: 
+    Type: "AWS::IAM::Role"
+    Properties: 
+      #RoleName: "sagemaker-notebook-webui-role"
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+        - 
+          Effect: "Allow"
+          Principal: 
+            Service: 
+              - "sagemaker.amazonaws.com"
+          Action: 
+          - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonSageMakerFullAccess"
+        - "arn:aws:iam::aws:policy/AmazonBedrockFullAccess"
+  NotebookInstance:
+    Type: AWS::SageMaker::NotebookInstance
+    Properties:
+      InstanceType: !Ref InstanceType
+      LifecycleConfigName: !GetAtt LifeCycleConfig.NotebookInstanceLifecycleConfigName
+      #NotebookInstanceName: !Ref AWS::StackName
+      RoleArn: !GetAtt ExecutionRole.Arn
+      VolumeSizeInGB: !Ref Volume
+      Tags:
+        - Key: "Managed"
+          Value: "cloudformation"
+
+  LifeCycleConfig:
+    Type: AWS::SageMaker::NotebookInstanceLifecycleConfig
+    Properties:
+      OnCreate:
+        - Content: 
+            Fn::Base64: 
+              !Sub |
+                #!/bin/bash
+
+                set -ex
+                sudo -u ec2-user -i << EOF
+                # install comfyui
+                cd ~/SageMaker
+                git clone https://github.com/comfyanonymous/ComfyUI.git
+                cd ComfyUI/custom_nodes/
+                git clone https://github.com/ltdrdata/ComfyUI-Manager.git
+                git clone https://github.com/yytdfc/ComfyUI-Bedrock.git
+                git clone https://github.com/WASasquatch/was-node-suite-comfyui.git
+                git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git
+                cd ~/SageMaker/ComfyUI
+                source activate pytorch_p310
+                python3 -mpip install -r requirements.txt
+
+                # start comfyui in background
+                cat > ~/SageMaker/start_comfyui.sh << EOF0
+                #! /bin/bash
+                cd ~/SageMaker/ComfyUI
+                source activate pytorch_p310
+                python3 main.py
+                EOF0
+
+                chmod +x ~/SageMaker/start_comfyui.sh
+                EOF
+      OnStart:
+        - Content: 
+            Fn::Base64: 
+              !Sub |
+                #!/bin/bash
+                set -ex
+                sudo -u ec2-user -i << EOF
+                screen -dmS comfyui ~/SageMaker/start_comfyui.sh
+                EOF
+Outputs:
+  ComfyUIURL:
+    Description: ComfyUI URL
+    Value: !Join
+        - ''
+        - - https://
+          - !GetAtt 'NotebookInstance.NotebookInstanceName'
+          - .notebook.
+          - !Ref 'AWS::Region'
+          - .sagemaker.aws/proxy/8188/
+  NotebookURL:
+    Description: SageMaker Notebook Instance URL.
+    Value: !Join
+        - ''
+        - - https://
+          - !Ref 'AWS::Region'
+          - .console.aws.amazon.com/sagemaker/home?region=
+          - !Ref 'AWS::Region'
+          - '#/notebook-instances/openNotebook/'
+          - !GetAtt 'NotebookInstance.NotebookInstanceName'
+          - '?view=lab'
