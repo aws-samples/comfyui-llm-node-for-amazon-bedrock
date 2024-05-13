@@ -64,11 +64,15 @@ Resources:
                 git clone https://github.com/comfyanonymous/ComfyUI.git
                 cd ComfyUI/custom_nodes/
                 git clone https://github.com/ltdrdata/ComfyUI-Manager.git
-                git clone https://github.com/yytdfc/ComfyUI-Bedrock.git
+                git clone https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock.git
                 git clone https://github.com/WASasquatch/was-node-suite-comfyui.git
                 git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git
+
                 cd ~/SageMaker/ComfyUI
                 source activate pytorch_p310
+                python3 -mpip install -r requirements.txt
+
+                cd ~/SageMaker/ComfyUI/custom_nodes/comfyui-llm-node-for-amazon-bedrock
                 python3 -mpip install -r requirements.txt
 
                 # start comfyui in background
