@@ -57,7 +57,7 @@ class ImageOCRByTextract:
                 box = item['Geometry']['BoundingBox']
                 left = int(box['Left'] * width)
                 top = int(box['Top'] * height)
-                width = int(box['Width'] * width))
+                width = int(box['Width'] * width)
                 height = int(box['Height']* height)
 
                 # 将信息添加到结果列表中
@@ -80,10 +80,8 @@ class ImageOCRByTextract:
         # 将结果列表转换为JSON格式
         json_result = json.dumps(result, indent=2)
         # 将遮罩图像和原始图像进行位运算,生成遮罩后的图像
-        masked_img = cv2.bitwise_and(img, mask)
-                        image = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(
-                                            0
-                                        )
+        masked_img = cv2.bitwise_and(image, mask)
+        masked_img = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(0)
 
         return json_result,masked_img
 
@@ -95,6 +93,6 @@ class ImageOCRByTextract:
 
 
 NODE_CLASS_MAPPINGS = {
-    "Image OCR By Textract": ImageOCRByTextract,
+    "Image OCR By Textract": ImageOCRByTextract
 }
 
