@@ -12,6 +12,7 @@ import numpy as np
 import torch
 
 from .session import get_client
+from .utils import image_to_base64
 
 MAX_RETRY = 3
 
@@ -160,6 +161,7 @@ class BedrockTitanInpainting:
                 "prompt": ("STRING", {"multiline": True}),
                 "negative_prompt": ("STRING", {"multiline": True}),
                 "mask_prompt": ("STRING", {"multiline": True}),
+                "mask_image": ("IMAGE",),
                 "num_images": (
                     "INT",
                     {
@@ -219,7 +221,7 @@ class BedrockTitanInpainting:
     CATEGORY = "aws"
 
     @retry(tries=MAX_RETRY)
-    def forward(self, image, prompt, negative_prompt, mask_prompt, num_images, cfg_scale, resolution):
+    def forward(self, image, mask_image, prompt, negative_prompt, mask_prompt, num_images, cfg_scale, resolution):
         """
         Invokes the Titan Image model to create an image using the input provided in the request body.
 
@@ -227,17 +229,14 @@ class BedrockTitanInpainting:
         :param seed: Random noise seed (range: 0 to 2147483647)
         :return: Base64-encoded inference response from the model.
         """
-        image = image[0] * 255.0
-        image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
 
         height, width = map(int, re.findall(r"\d+", resolution))
+        image_base64 = image_to_base64(image)
 
-        buffer = BytesIO()
-        image.save(buffer, format="PNG")
+        maskimage_base64 = ""
+        if mask_image is not None:
+            maskimage_base64 = image_to_base64(mask_image)
 
-        image_data = buffer.getvalue()
-
-        image_base64 = base64.b64encode(image_data).decode("utf-8")
 
         # The different model providers have individual request and response formats.
         # For the format, ranges, and default values for Titan Image models refer to:
@@ -250,7 +249,8 @@ class BedrockTitanInpainting:
                     "image": image_base64,                         
                     "text": prompt,
                     "negativeText": negative_prompt,        
-                    "maskPrompt": mask_prompt,                                     
+                    "maskPrompt": mask_prompt,
+                    "maskImage": maskimage_base64,                                   
                 },                                                 
                 "imageGenerationConfig": {
                     "numberOfImages": num_images,
