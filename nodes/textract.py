@@ -19,8 +19,60 @@ s3_client = get_client(service_name="textract")
 
 MAX_RETRY = 3
 
+class GetDominatColor:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "image": ("IMAGE",)
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("color")
+    FUNCTION = "forward"
+    CATEGORY = "aws"
+    OUTPUT_NODE = True
+
+    def get_dominant_color(self, image, box):
+        """
+        获取图像中指定边界框区域内的主要颜色,并返回 #RRGGBB 格式的颜色字符串
+        参数:
+            image: 输入图像
+            box: 边界框坐标,格式为(left, top, width, height)
+        返回值:
+            主要颜色的 #RRGGBB 格式字符串
+        """
+
+        # 从边界框坐标构造ROI区域
+        position = json.loads(box)['BoundingBox']
+        left = position['left']
+        top = position['top']
+        width = position['width']
+        height = position['height']
+
+        roi = image[top:top+height, left:left+width]
+
+        # 计算ROI区域的像素值直方图
+        pixels = np.float32(roi.reshape(-1, 3))
+        n_colors = 8
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 200, .1)
+        _, _, palette = cv2.kmeans(pixels, n_colors, None, criteria, 10, cv2.KMEANS_PP_CENTERS)
+
+        # 获取最多像素对应的颜色
+        counts = np.histogram(pixels, bins=np.arange(n_colors+1))[0]
+        dominant_index = np.argmax(counts)
+        dominant_color = palette[dominant_index].astype(np.uint8)
+
+        # 转换为 #RRGGBB 格式的字符串
+        hex_color = '#%02x%02x%02x' % (int(dominant_color[0]), int(dominant_color[1]), int(dominant_color[2]))
+
+        return hex_color
 
 
+    @retry(tries=MAX_RETRY)
+    def forward(self, image,box):
+        return self.ocr_by_textract(image)
 
 class ImageOCRByTextract:
     @classmethod
@@ -32,6 +84,7 @@ class ImageOCRByTextract:
         }
 
     RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("OCR result")
     FUNCTION = "forward"
     CATEGORY = "aws"
     OUTPUT_NODE = True
@@ -56,8 +109,8 @@ class ImageOCRByTextract:
                 box = item['Geometry']['BoundingBox']
                 left = int(box['Left'] * width)
                 top = int(box['Top'] * height)
-                width = int(box['Width'] )
-                height = int(box['Height'])
+                width = int(box['Width'] * width))
+                height = int(box['Height']* height)
 
                 # 将信息添加到结果列表中
                 result.append({
@@ -79,9 +132,7 @@ class ImageOCRByTextract:
         return self.ocr_by_textract(image)
 
 
-NODE_CLASS_MAPPINGS = {
-    "Image OCR By Textract": ImageOCRByTextract
-}
+
 
 
 class ImageToMaskByClip:
@@ -100,7 +151,7 @@ class ImageToMaskByClip:
     OUTPUT_NODE = True
 
     def genMaskByClip(self,image_file,position_info):
-        position=json.loads(position_info)
+        position=json.loads(position_info)['BoundingBox']
         left = position['Left']
         top = position['Top']
         width = position['Width']
@@ -128,9 +179,9 @@ class ImageToMaskByClip:
     def forward(self, image, position_info):
         return self.genMaskByClip(image,position_info)
 
-
-    NODE_CLASS_MAPPINGS = {
-        "get mask by textract clip": ImageToMaskByClip
-    }
-
+NODE_CLASS_MAPPINGS = {
+    "Image OCR By Textract": ImageOCRByTextract,
+    "Get Dominat Color": GetDominatColor,
+    "get mask by textract clip": ImageToMaskByClip
+}
 
