@@ -161,7 +161,6 @@ class BedrockTitanInpainting:
                 "prompt": ("STRING", {"multiline": True}),
                 "negative_prompt": ("STRING", {"multiline": True}),
                 "mask_prompt": ("STRING", {"multiline": True}),
-                "mask_image": ("IMAGE",),
                 "num_images": (
                     "INT",
                     {
@@ -213,7 +212,10 @@ class BedrockTitanInpainting:
                         "1173 x 640",
                     ],
                 ),
-            }
+            },
+            "optional": {
+                "mask_image": ("IMAGE",),
+            },
         }
 
     RETURN_TYPES = ("IMAGE",)
@@ -221,7 +223,9 @@ class BedrockTitanInpainting:
     CATEGORY = "aws"
 
     @retry(tries=MAX_RETRY)
-    def forward(self, image, mask_image, prompt, negative_prompt, mask_prompt, num_images, cfg_scale, resolution):
+    def forward(self, image, prompt, 
+                negative_prompt, mask_prompt, 
+                num_images, cfg_scale, resolution, **kwargs):
         """
         Invokes the Titan Image model to create an image using the input provided in the request body.
 
@@ -234,8 +238,8 @@ class BedrockTitanInpainting:
         image_base64 = image_to_base64(image)
 
         maskimage_base64 = ""
-        if mask_image is not None:
-            maskimage_base64 = image_to_base64(mask_image)
+        if "mask_image" in kwargs:
+            maskimage_base64 = image_to_base64(kwargs["mask_image"])
 
 
         # The different model providers have individual request and response formats.
