@@ -1,5 +1,4 @@
 from modelscope.pipelines import pipeline
-from util import save_images
 import json
 import os
 import re
@@ -47,17 +46,15 @@ class AnyTextGen:
             "ori_image": mask_image
         }
         results, rtn_code, rtn_warning, debug_info = pipe(input_data, mode=mode, **params)
-        image = torch.from_numpy(np.array(results[0]).astype(np.float32) / 255.0).unsqueeze(
-                    0
-                )
+        image = torch.from_numpy(np.array(results[0]).astype(np.float32) / 255.0).unsqueeze(0)
         return image
 
-    @retry(tries=MAX_RETRY)
+    @retry(tries=3)
     def forward(self, image):
         return self.any_text_edit_image(image)
 
 
 
 NODE_CLASS_MAPPINGS = {
-    "AnyText Gen": AnyTextGen,
+    "AnyText Gen": AnyTextGen
 }

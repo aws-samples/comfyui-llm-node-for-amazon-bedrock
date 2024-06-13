@@ -250,7 +250,7 @@ class BedrockClaude:
         # The different model providers have individual request and response formats.
         # For the format, ranges, and default values for Anthropic Claude, refer to:
         # https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html
-
+        print("prompt input:",prompt)
         body = json.dumps(
             {
                 "anthropic_version": "bedrock-2023-05-31",
@@ -278,6 +278,7 @@ class BedrockClaude:
             modelId=model_id,
         )
         message = json.loads(response.get("body").read())["content"][0]["text"]
+        print("output message:",message)
 
         return (message,)
 
