@@ -82,7 +82,7 @@ class ImageOCRByTextract:
                 x1, y1 = int(left), int(top)
                 x2, y2 = int(left + width), int(top + height)
                 # 在遮罩图像上绘制白色矩形框
-                cv2.rectangle(temp_mask, (x1, y1), (x2, y2), (255, 255, 255), -1)
+                cv2.rectangle(temp_mask, (x1, y1), (x2, y2), (0, 0, 0), -1)
                 mask = cv2.bitwise_or(mask, temp_mask)
 
         # 将遮罩图像和原始图像进行位运算,生成遮罩后的图像
@@ -91,7 +91,7 @@ class ImageOCRByTextract:
 
         print("result",result)
 
-        return all_text,temp_img_path
+        return all_text,result[0]['Left'],result[0]['Top'],result[0]['Width'],result[0]['Height'],masked_img
 
 
     @retry(tries=MAX_RETRY)
