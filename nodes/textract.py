@@ -104,11 +104,13 @@ class ImageOCRByTextractV2:
 
     @classmethod
     def INPUT_TYPES(s):
-        return {
-            "required": {
-                "image": ("IMAGE",)
-            }
-        }
+        input_dir = folder_paths.get_input_directory()
+        files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
+        return {"required":
+                  {
+                      "image": (sorted(files), {"image_upload": True}),
+                    },
+                }
 
     RETURN_TYPES = ("STRING","STRING","STRING")
     RETURN_NAMES = ("Texts","Original Image Path","Mask Image Path")
