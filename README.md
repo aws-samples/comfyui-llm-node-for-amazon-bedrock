@@ -87,7 +87,8 @@ Workflow examples are in `./workflows`. To import these workflows, click "Load" 
 
 ### Text to image with prompt translation and refinement
 Automatically refine the text prompt to generate high quality images.
-[Load the workflow example here](workflows/text2img_with_prompt_refinement.json)
+
+Download [this workflow file](workflows/text2img_with_prompt_refinement.json) and load in ComfyUI
 
 You can use the Bedrock LLM to refine and translate the prompt. It then utilize the image generation model (eg. SDXL, Titan Image) provided by Bedrock.
 The result is much better after preprocessing of prompt compared to the original SDXL model (the bottom output in figure) which doesn't have the capability of understanding Chinese.
@@ -97,14 +98,18 @@ The result is much better after preprocessing of prompt compared to the original
 ### Image Caption with Claude 3
 
 Generate captions of a provided image.
-[Load the workflow example here](workflows/claude3_image_caption.json)
+
+Download [this workflow file](workflows/claude3_image_caption.json) and load in ComfyUI
+
 This workflow uses Bedrock Claude 3 multimodal to caption image.
 
 ![](./assets/example_claude3_multimodal.webp)
 
 ### Inpainting with natural language
 Use natural language to describe an item in the image and replace it. 
-[Load the workflow example here](workflows/inpainting_with_natural_language.json)
+
+Download [this workflow file](workflows/inpainting_with_natural_language.json) and load in ComfyUI
+
 This workflow leverages Claude3 to analyze the replacement information in the prompt. Additionally, it utilizes Bedrock Titan Image to detect objects with text and perform inpainting in a single step.
 
 ![](./assets/example_inpainting_with_natural_language.webp)
