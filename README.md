@@ -111,9 +111,9 @@ Here are models ready for use, more models are coming soon.
 
   - Titan Image Generator G1 (1.x)
     - [X] text to image
-    - [ ] inpainting
-    - [ ] outpainting
-    - [ ] image variation
+    - [X] inpainting
+    - [X] outpainting
+    - [X] image variation
 
 - Stability AI:
 
