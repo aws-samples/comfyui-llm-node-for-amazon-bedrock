@@ -86,20 +86,26 @@ If you haven't set the default region and running on aws instance, this nodes wi
 Workflow examples are in `./workflows`. To import these workflows, click "Load" in the ComfyUI UI, go to workflows directory and choose the one you want to experiment with.
 
 ### Text to image with prompt translation and refinement
+Automatically refine the text prompt to generate high quality images.
+[Load the workflow example here](workflows/text2img_with_prompt_refinement.json)
 
-You can use the Bedrock LLM to refine the prompt input and get a better result. Here is an example of doing prompt translation and refinement, and the invoke the image generation model (eg. SDXL, Titan Image) provided by Bedrock.
+You can use the Bedrock LLM to refine and translate the prompt. It then utilize the image generation model (eg. SDXL, Titan Image) provided by Bedrock.
 The result is much better after preprocessing of prompt compared to the original SDXL model (the bottom output in figure) which doesn't have the capability of understanding Chinese.
 
 ![](./assets/example_prompts_refine.webp)
 
 ### Image Caption with Claude 3
 
-You can use Claude 3 multimodal to caption image:
+Generate captions of a provided image.
+[Load the workflow example here](workflows/claude3_image_caption.json)
+This workflow uses Bedrock Claude 3 multimodal to caption image.
 
 ![](./assets/example_claude3_multimodal.webp)
 
 ### Inpainting with natural language
-Use natural language to describe an item in the image and replace it. This workflow leverages Claude3 to analyze the replacement information in the prompt. Additionally, it utilizes Bedrock Titan Image to detect objects with text and perform inpainting in a single step.
+Use natural language to describe an item in the image and replace it. 
+[Load the workflow example here](workflows/inpainting_with_natural_language.json)
+This workflow leverages Claude3 to analyze the replacement information in the prompt. Additionally, it utilizes Bedrock Titan Image to detect objects with text and perform inpainting in a single step.
 
 ![](./assets/example_inpainting_with_natural_language.webp)
 
