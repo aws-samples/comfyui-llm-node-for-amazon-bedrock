@@ -1,130 +1,7 @@
 {
-  "last_node_id": 34,
-  "last_link_id": 48,
+  "last_node_id": 38,
+  "last_link_id": 52,
   "nodes": [
-    {
-      "id": 29,
-      "type": "Bedrock - SDXL",
-      "pos": [
-        1251,
-        368
-      ],
-      "size": {
-        "0": 400,
-        "1": 268
-      },
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "prompt",
-          "type": "STRING",
-          "link": 47,
-          "widget": {
-            "name": "prompt"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            33
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "Bedrock - SDXL"
-      },
-      "widgets_values": [
-        "",
-        "1024 x 1024",
-        "cinematic",
-        6.978,
-        20,
-        "NONE",
-        "Auto",
-        0,
-        "fixed"
-      ]
-    },
-    {
-      "id": 33,
-      "type": "PreviewImage",
-      "pos": [
-        1701.8984375,
-        650.9765625
-      ],
-      "size": {
-        "0": 395.65234375,
-        "1": 415.90234375
-      },
-      "flags": {},
-      "order": 7,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 41
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "PreviewImage"
-      }
-    },
-    {
-      "id": 32,
-      "type": "Bedrock - Titan Image",
-      "pos": [
-        1699.7958090311772,
-        368.64602020487723
-      ],
-      "size": {
-        "0": 400,
-        "1": 220.00001525878906
-      },
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "prompt",
-          "type": "STRING",
-          "link": 48,
-          "widget": {
-            "name": "prompt"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            41
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "Bedrock - Titan Image"
-      },
-      "widgets_values": [
-        "",
-        1,
-        "premium",
-        "1024 x 1024",
-        8,
-        0,
-        "fixed"
-      ]
-    },
     {
       "id": 27,
       "type": "PreviewImage",
@@ -137,7 +14,7 @@
         "1": 415.90234375
       },
       "flags": {},
-      "order": 6,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -155,14 +32,14 @@
       "type": "ShowText|pysssss",
       "pos": [
         824,
-        904
+        904.4087612092363
       ],
       "size": {
         "0": 367.124755859375,
         "1": 159.00286865234375
       },
       "flags": {},
-      "order": 3,
+      "order": 5,
       "mode": 0,
       "inputs": [
         {
@@ -188,7 +65,7 @@
       },
       "widgets_values": [
         "",
-        "A playful puppy with a soft, fluffy coat frolics in a lush, verdant meadow, its bright eyes filled with curiosity and its tail wagging joyfully as it explores the vibrant, sun-dappled landscape."
+        "A playful puppy frolics in a lush, verdant meadow, its fluffy, golden-brown fur glistening in the warm sunlight as it chases after a butterfly, its tail wagging with unbridled joy."
       ]
     },
     {
@@ -196,7 +73,7 @@
       "type": "Prompt Template",
       "pos": [
         820.4378327684955,
-        369.0918288922683
+        369.50059010150466
       ],
       "size": {
         "0": 376.08880615234375,
@@ -239,14 +116,14 @@
       "type": "Bedrock - Claude",
       "pos": [
         825,
-        632
+        632.4087612092363
       ],
-      "size": [
-        364.671875,
-        196
-      ],
+      "size": {
+        "0": 364.671875,
+        "1": 196
+      },
       "flags": {},
-      "order": 2,
+      "order": 3,
       "mode": 0,
       "inputs": [
         {
@@ -265,7 +142,7 @@
           "links": [
             46,
             47,
-            48
+            49
           ],
           "shape": 3,
           "slot_index": 0
@@ -302,17 +179,217 @@
           "name": "STRING",
           "type": "STRING",
           "links": [
-            17
+            17,
+            51
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "title": "Original Prompt in Chinese",
+      "properties": {
+        "Node name for S&R": "Text Multiline"
+      },
+      "widgets_values": [
+        "一只小狗"
+      ]
+    },
+    {
+      "id": 38,
+      "type": "PreviewImage",
+      "pos": [
+        1254,
+        1215
+      ],
+      "size": [
+        326.11907467272226,
+        246.51877671489797
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 52
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 33,
+      "type": "PreviewImage",
+      "pos": [
+        1702,
+        651
+      ],
+      "size": [
+        394.77222867562205,
+        456.2434935821623
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 50
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 36,
+      "type": "Bedrock - Titan Text to Image",
+      "pos": [
+        1699,
+        379
+      ],
+      "size": {
+        "0": 400,
+        "1": 220
+      },
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 49,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            50
           ],
           "shape": 3,
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "Text Multiline"
+        "Node name for S&R": "Bedrock - Titan Text to Image"
       },
       "widgets_values": [
-        "一只小狗"
+        "",
+        1,
+        "standard",
+        "1024 x 1024",
+        7,
+        1363654400,
+        "randomize"
+      ]
+    },
+    {
+      "id": 29,
+      "type": "Bedrock - SDXL",
+      "pos": [
+        1251,
+        368
+      ],
+      "size": {
+        "0": 400,
+        "1": 268
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 47,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            33
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - SDXL"
+      },
+      "widgets_values": [
+        "",
+        "1024 x 1024",
+        "cinematic",
+        6.978,
+        30,
+        "NONE",
+        "Auto",
+        0,
+        "randomize"
+      ]
+    },
+    {
+      "id": 37,
+      "type": "Bedrock - SDXL",
+      "pos": [
+        818.9974893016898,
+        1207.5205707252294
+      ],
+      "size": [
+        400,
+        268
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 51,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            52
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - SDXL"
+      },
+      "widgets_values": [
+        "",
+        "1024 x 1024",
+        "None",
+        6.985,
+        30,
+        "NONE",
+        "Auto",
+        1966903883,
+        "randomize"
       ]
     }
   ],
@@ -330,14 +407,6 @@
       29,
       0,
       27,
-      0,
-      "IMAGE"
-    ],
-    [
-      41,
-      32,
-      0,
-      33,
       0,
       "IMAGE"
     ],
@@ -366,41 +435,65 @@
       "STRING"
     ],
     [
-      48,
+      49,
       34,
       0,
-      32,
+      36,
       0,
       "STRING"
+    ],
+    [
+      50,
+      36,
+      0,
+      33,
+      0,
+      "IMAGE"
+    ],
+    [
+      51,
+      5,
+      0,
+      37,
+      0,
+      "STRING"
+    ],
+    [
+      52,
+      37,
+      0,
+      38,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [
     {
-      "title": "Bedrock - Cluade",
+      "title": "Prompt Refinement (Bedrock Claude)",
       "bounding": [
         810,
         295,
-        396,
-        790
+        411,
+        813
       ],
       "color": "#b58b2a",
       "font_size": 24,
       "locked": false
     },
     {
-      "title": "Bedrock - TitanImage",
+      "title": "Text to Image (Bedrock TitanImage)",
       "bounding": [
         1690,
         295,
-        420,
-        782
+        422,
+        814
       ],
       "color": "#88A",
       "font_size": 24,
       "locked": false
     },
     {
-      "title": "Bedrock - SDXL",
+      "title": "Text to Image (Bedrock SDXL)",
       "bounding": [
         1241,
         294,
@@ -410,12 +503,31 @@
       "color": "#a1309b",
       "font_size": 24,
       "locked": false
+    },
+    {
+      "title": "Text to Image without Prompt Refinement",
+      "bounding": [
+        809,
+        1133,
+        802,
+        355
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "locked": false
     }
   ],
   "config": {},
   "extra": {
     "workspace_info": {
       "id": "c350a89c-0edd-4bef-9fc6-f83c239228a8"
+    },
+    "ds": {
+      "scale": 0.5209868481924381,
+      "offset": [
+        -240.85175850503865,
+        -99.9228998458822
+      ]
     }
   },
   "version": 0.4

@@ -85,7 +85,7 @@ If you haven't set the default region and running on aws instance, this nodes wi
 
 Workflow examples are in `./workflows`
 
-### prompts refine and translate
+### Text to image with prompt translation and refinement
 
 You can use the Bedrock LLM to refine the prompt input and get a better result. Here is an example of doing prompt translation and refinement, and the invoke the image generation model (eg. SDXL, Titan Image) provided by Bedrock.
 The result is much better after preprocessing of prompt compared to the original SDXL model (the bottom output in figure) which doesn't have the capability of understanding Chinese.
