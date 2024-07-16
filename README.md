@@ -83,7 +83,7 @@ If you haven't set the default region and running on aws instance, this nodes wi
 
 ## Example
 
-Workflow examples are in `./workflows`
+Workflow examples are in `./workflows`. To import these workflows, click "Load" in the ComfyUI UI, go to workflows directory and choose the one you want to experiment with.
 
 ### Text to image with prompt translation and refinement
 
@@ -97,6 +97,11 @@ The result is much better after preprocessing of prompt compared to the original
 You can use Claude 3 multimodal to caption image:
 
 ![](./assets/example_claude3_multimodal.webp)
+
+### Inpainting with natural language
+Use natural language to describe an item in the image and replace it. This workflow leverages Claude3 to analyze the replacement information in the prompt. Additionally, it utilizes Bedrock Titan Image to detect objects with text and perform inpainting in a single step.
+
+![](./assets/example_inpainting_with_natural_language.webp)
 
 ## Support models:
 

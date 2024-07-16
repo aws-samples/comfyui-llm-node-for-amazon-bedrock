@@ -1,0 +1,599 @@
+{
+  "last_node_id": 49,
+  "last_link_id": 63,
+  "nodes": [
+    {
+      "id": 8,
+      "type": "ShowText|pysssss",
+      "pos": [
+        824,
+        904.4087612092363
+      ],
+      "size": {
+        "0": 367.124755859375,
+        "1": 159.00286865234375
+      },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 46,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "shape": 6,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "",
+        "{\n  \"to_replace\": \"duck\",\n  \"replace_with\": \"flying eagle\"\n}"
+      ]
+    },
+    {
+      "id": 23,
+      "type": "Prompt Template",
+      "pos": [
+        820.4378327684955,
+        369.50059010150466
+      ],
+      "size": {
+        "0": 376.08880615234375,
+        "1": 212.24671936035156
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 17,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            45
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Prompt Template"
+      },
+      "widgets_values": [
+        "",
+        "You’re an image edit prompt analyser. Analyze the prompt \"[prompt]\" and output in JSON format with keys: “to_replace” (string), “replace_with” (string)."
+      ]
+    },
+    {
+      "id": 34,
+      "type": "Bedrock - Claude",
+      "pos": [
+        825,
+        632.4087612092363
+      ],
+      "size": {
+        "0": 364.671875,
+        "1": 196
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 45,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            46,
+            57
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - Claude"
+      },
+      "widgets_values": [
+        "",
+        "anthropic.claude-3-haiku-20240307-v1:0",
+        200,
+        0.5,
+        1,
+        250
+      ]
+    },
+    {
+      "id": 45,
+      "type": "JSON Text Extraction",
+      "pos": [
+        1257,
+        375
+      ],
+      "size": {
+        "0": 315,
+        "1": 214
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "json_text",
+          "type": "STRING",
+          "link": 57,
+          "widget": {
+            "name": "json_text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            58,
+            60
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            59,
+            61
+          ],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "JSON Text Extraction"
+      },
+      "widgets_values": [
+        "",
+        "to_replace",
+        "replace_with",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 46,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1259,
+        693
+      ],
+      "size": {
+        "0": 315,
+        "1": 76
+      },
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 58,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "shape": 6
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "",
+        "duck"
+      ]
+    },
+    {
+      "id": 42,
+      "type": "Bedrock - Titan Inpainting",
+      "pos": [
+        1658,
+        370
+      ],
+      "size": {
+        "0": 539.52294921875,
+        "1": 263.39349365234375
+      },
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 62
+        },
+        {
+          "name": "mask_image",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 61,
+          "widget": {
+            "name": "prompt"
+          }
+        },
+        {
+          "name": "mask_prompt",
+          "type": "STRING",
+          "link": 60,
+          "widget": {
+            "name": "mask_prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            55
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - Titan Inpainting"
+      },
+      "widgets_values": [
+        "",
+        "",
+        "duck",
+        2,
+        8,
+        "1024 x 1024"
+      ]
+    },
+    {
+      "id": 33,
+      "type": "PreviewImage",
+      "pos": [
+        1663,
+        689
+      ],
+      "size": {
+        "0": 530.0150756835938,
+        "1": 404.49725341796875
+      },
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 55
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 47,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1263,
+        877
+      ],
+      "size": {
+        "0": 315,
+        "1": 76
+      },
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 59,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "shape": 6
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "",
+        "flying eagle"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "Text Multiline",
+      "pos": [
+        400,
+        370
+      ],
+      "size": {
+        "0": 379.65625,
+        "1": 198.87109375
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            17
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "title": "Image Editing Prompt",
+      "properties": {
+        "Node name for S&R": "Text Multiline"
+      },
+      "widgets_values": [
+        "replace the duck with a flying eagle"
+      ]
+    },
+    {
+      "id": 48,
+      "type": "Image From URL",
+      "pos": [
+        430,
+        650
+      ],
+      "size": {
+        "0": 315,
+        "1": 58
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            62,
+            63
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "title": "Image to Edit from URL",
+      "properties": {
+        "Node name for S&R": "Image From URL"
+      },
+      "widgets_values": [
+        "https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock/blob/540c07d564fd4d2d2523e752c2fdbdf9d9e874ac/assets/flying_duck.png"
+      ]
+    },
+    {
+      "id": 49,
+      "type": "PreviewImage",
+      "pos": [
+        414,
+        814
+      ],
+      "size": [
+        351.83990563452517,
+        225.11827017545693
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 63
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    }
+  ],
+  "links": [
+    [
+      17,
+      5,
+      0,
+      23,
+      0,
+      "STRING"
+    ],
+    [
+      45,
+      23,
+      0,
+      34,
+      0,
+      "STRING"
+    ],
+    [
+      46,
+      34,
+      0,
+      8,
+      0,
+      "STRING"
+    ],
+    [
+      55,
+      42,
+      0,
+      33,
+      0,
+      "IMAGE"
+    ],
+    [
+      57,
+      34,
+      0,
+      45,
+      0,
+      "STRING"
+    ],
+    [
+      58,
+      45,
+      0,
+      46,
+      0,
+      "STRING"
+    ],
+    [
+      59,
+      45,
+      1,
+      47,
+      0,
+      "STRING"
+    ],
+    [
+      60,
+      45,
+      0,
+      42,
+      3,
+      "STRING"
+    ],
+    [
+      61,
+      45,
+      1,
+      42,
+      2,
+      "STRING"
+    ],
+    [
+      62,
+      48,
+      0,
+      42,
+      0,
+      "IMAGE"
+    ],
+    [
+      63,
+      48,
+      0,
+      49,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "Convert Text to Inputs (Bedrock Claude)",
+      "bounding": [
+        810,
+        295,
+        804,
+        817
+      ],
+      "color": "#b58b2a",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Object Detection and Inpainting(Bedrock TitanImage)",
+      "bounding": [
+        1647,
+        294,
+        575,
+        822
+      ],
+      "color": "#88A",
+      "font_size": 24,
+      "locked": false
+    }
+  ],
+  "config": {},
+  "extra": {
+    "workspace_info": {
+      "id": "c350a89c-0edd-4bef-9fc6-f83c239228a8"
+    },
+    "ds": {
+      "scale": 0.6727499949325618,
+      "offset": [
+        -337.0030387848718,
+        -99.23183611701575
+      ]
+    }
+  },
+  "version": 0.4
+}
