@@ -114,6 +114,15 @@ This workflow leverages Claude3 to analyze the replacement information in the pr
 
 ![](./assets/example_inpainting_with_natural_language.webp)
 
+### Generate Image Variation
+Use natural language to generate variation of an image.
+
+Download [this workflow file](workflows/generate_image_variation.json) and load in ComfyUI
+
+This workflow begins by using Bedrock Claude3 to refine the image editing prompt. It then utilizes Bedrock Titan Image's variation feature to generate similar images based on the refined prompt.
+
+![](./assets/example_generate_image_variation.webp)
+
 ## Support models:
 
 Here are models ready for use, more models are coming soon.
