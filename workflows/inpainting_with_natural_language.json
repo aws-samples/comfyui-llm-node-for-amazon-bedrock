@@ -407,6 +407,31 @@
       ]
     },
     {
+      "id": 49,
+      "type": "PreviewImage",
+      "pos": [
+        414,
+        814
+      ],
+      "size": [
+        351.83990478515625,
+        246
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 63
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
       "id": 48,
       "type": "Image From URL",
       "pos": [
@@ -437,33 +462,8 @@
         "Node name for S&R": "Image From URL"
       },
       "widgets_values": [
-        "https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock/blob/540c07d564fd4d2d2523e752c2fdbdf9d9e874ac/assets/flying_duck.png"
+        "https://raw.githubusercontent.com/aws-samples/comfyui-llm-node-for-amazon-bedrock/540c07d564fd4d2d2523e752c2fdbdf9d9e874ac/assets/flying_duck.png"
       ]
-    },
-    {
-      "id": 49,
-      "type": "PreviewImage",
-      "pos": [
-        414,
-        814
-      ],
-      "size": [
-        351.83990563452517,
-        225.11827017545693
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 63
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "PreviewImage"
-      }
     }
   ],
   "links": [
