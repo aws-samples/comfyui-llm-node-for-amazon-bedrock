@@ -20,16 +20,16 @@ Using [__*Amazon SageMaker*__](https://aws.amazon.com/sagemaker/) is the easiest
 1. Clone this repository to your ComfyUI `custom_nodes` directory:
 
 ```bash
-pip install -r requirements.txt
 cd ComfyUI/custom_nodes
-git clone https://github.com/yytdfc/ComfyUI-Bedrock.git
+git clone https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock.git
+pip install -r comfyui-llm-node-for-amazon-bedrock/requirements.txt
 
 # better to work with some third-party nodes
 git clone https://github.com/WASasquatch/was-node-suite-comfyui.git
 git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git
 ```
 
-2. You need to make sure your access to Bedrock models are granted. Go to aws console [*https://.console.aws.amazon.com/bedrock/home#/modelaccess*](https://console.aws.amazon.com/bedrock/home#/modelaccess) . Make sure these models in the figure are checked.
+2. You need to make sure your access to Bedrock models are granted. Go to aws console [*https://console.aws.amazon.com/bedrock/home#/modelaccess*](https://console.aws.amazon.com/bedrock/home#/modelaccess) . Make sure these models in the figure are checked.
 
 ![](./assets/model_access.webp)
 
