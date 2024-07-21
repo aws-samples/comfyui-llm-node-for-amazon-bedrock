@@ -108,7 +108,7 @@
       },
       "widgets_values": [
         "",
-        "A majestic feline, its piercing gaze captivating, sits atop a lush, verdant hill, with a speech bubble beside it declaring, \"I am the ruler of this kingdom.\""
+        "A serene winter landscape with a fluffy feline companion adorned in a festive red bow, gazing contentedly at the glistening snow-covered trees and twinkling lights that adorn the cozy cabin in the distance."
       ]
     },
     {
@@ -146,49 +146,16 @@
       ]
     },
     {
-      "id": 5,
-      "type": "Text Multiline",
-      "pos": [
-        362,
-        368
-      ],
-      "size": {
-        "0": 379.65625,
-        "1": 198.87109375
-      },
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": [
-            17
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "title": "Image Editing Prompt",
-      "properties": {
-        "Node name for S&R": "Text Multiline"
-      },
-      "widgets_values": [
-        "cat speaking in a bubble"
-      ]
-    },
-    {
       "id": 49,
       "type": "Bedrock - Titan Variation",
       "pos": [
         1229.2916318058303,
         406.2239222923436
       ],
-      "size": [
-        610.4379554971729,
-        192
-      ],
+      "size": {
+        "0": 610.4379272460938,
+        "1": 192
+      },
       "flags": {},
       "order": 6,
       "mode": 0,
@@ -237,10 +204,10 @@
         1233.2916318058303,
         649.2239222923433
       ],
-      "size": [
-        609.0909792168591,
-        642.6731597334888
-      ],
+      "size": {
+        "0": 609.0910034179688,
+        "1": 642.6731567382812
+      },
       "flags": {},
       "order": 7,
       "mode": 0,
@@ -301,6 +268,39 @@
         0.5,
         1,
         250
+      ]
+    },
+    {
+      "id": 5,
+      "type": "Text Multiline",
+      "pos": [
+        362,
+        368
+      ],
+      "size": {
+        "0": 379.65625,
+        "1": 198.87109375
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            17
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "title": "Image Editing Prompt",
+      "properties": {
+        "Node name for S&R": "Text Multiline"
+      },
+      "widgets_values": [
+        "christmas cat"
       ]
     }
   ],
