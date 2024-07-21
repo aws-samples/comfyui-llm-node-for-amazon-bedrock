@@ -11,6 +11,9 @@ Parameters :
            - ml.g5.2xlarge
            - ml.g5.4xlarge
            - ml.g5.8xlarge
+           - ml.g6.2xlarge
+           - ml.g6.4xlarge
+           - ml.g6.8xlarge
     ConstraintDescription : Must be a valid EC2 instance type 
   Volume:
     Type: String

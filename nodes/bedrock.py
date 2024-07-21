@@ -32,6 +32,7 @@ class BedrockClaudeMultimodal:
                         "anthropic.claude-3-haiku-20240307-v1:0",
                         "anthropic.claude-3-sonnet-20240229-v1:0",
                         "anthropic.claude-3-opus-20240229-v1:0",
+                        "anthropic.claude-3-5-sonnet-20240620-v1:0",
                     ],
                 ),
                 "max_tokens": (
@@ -170,6 +171,7 @@ class BedrockClaude:
                 "prompt": ("STRING", {"multiline": True}),
                 "model_id": (
                     [
+                        "anthropic.claude-3-5-sonnet-20240620-v1:0",
                         "anthropic.claude-3-haiku-20240307-v1:0",
                         "anthropic.claude-3-sonnet-20240229-v1:0",
                         "anthropic.claude-3-opus-20240229-v1:0",

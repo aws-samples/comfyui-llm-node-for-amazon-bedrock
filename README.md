@@ -9,7 +9,7 @@ This repo is the ComfyUI nodes for Bedrock service. You can invoke foundation mo
 
 Using [__*Amazon SageMaker*__](https://aws.amazon.com/sagemaker/) is the easiest way to develop your AI model. You can deploy a ComfyUI on SageMaker notebook using CloudFormation.
 
-1. Open [CloudFormation console](https://console.aws.amazon.com/cloudformation/home#/stacks/create), and upload [`./assets/comfyui_on_sagemaker.yaml`](https://raw.githubusercontent.com/yytdfc/ComfyUI-Bedrock/main/assets/comfyui_on_sagemaker.yaml) by "Upload a template file".
+1. Open [CloudFormation console](https://console.aws.amazon.com/cloudformation/home#/stacks/create), and upload [`./assets/comfyui_on_sagemaker.yaml`](https://raw.githubusercontent.com/aws-samples/comfyui-llm-node-for-amazon-bedrock/main/assets/comfyui_on_sagemaker.yaml) by "Upload a template file".
 2. Next enter a stack name, choose a instance type fits for you.  Just next and next and submit.
 3. Wait for a moment, and you will find the ComfyUI url is ready for you. Enjoy!
 
@@ -20,16 +20,16 @@ Using [__*Amazon SageMaker*__](https://aws.amazon.com/sagemaker/) is the easiest
 1. Clone this repository to your ComfyUI `custom_nodes` directory:
 
 ```bash
-pip install -r requirements.txt
 cd ComfyUI/custom_nodes
-git clone https://github.com/yytdfc/ComfyUI-Bedrock.git
+git clone https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock.git
+pip install -r comfyui-llm-node-for-amazon-bedrock/requirements.txt
 
 # better to work with some third-party nodes
 git clone https://github.com/WASasquatch/was-node-suite-comfyui.git
 git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git
 ```
 
-2. You need to make sure your access to Bedrock models are granted. Go to aws console [*https://.console.aws.amazon.com/bedrock/home#/modelaccess*](https://console.aws.amazon.com/bedrock/home#/modelaccess) . Make sure these models in the figure are checked.
+2. You need to make sure your access to Bedrock models are granted. Go to aws console [*https://console.aws.amazon.com/bedrock/home#/modelaccess*](https://console.aws.amazon.com/bedrock/home#/modelaccess) . Make sure these models in the figure are checked.
 
 ![](./assets/model_access.webp)
 
