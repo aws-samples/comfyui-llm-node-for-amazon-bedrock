@@ -1,0 +1,702 @@
+{
+  "last_node_id": 60,
+  "last_link_id": 88,
+  "nodes": [
+    {
+      "id": 8,
+      "type": "ShowText|pysssss",
+      "pos": [
+        788.4729501037318,
+        739.5923923468681
+      ],
+      "size": {
+        "0": 370,
+        "1": 100
+      },
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 46,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "shape": 6,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "",
+        "A serene landscape blanketed in a pristine layer of snow, with bare trees silhouetted against a pale, hazy sky, and a frozen lake reflecting the muted colors of the winter wonderland."
+      ]
+    },
+    {
+      "id": 33,
+      "type": "PreviewImage",
+      "pos": [
+        1676.291604767913,
+        676.1573863837226
+      ],
+      "size": {
+        "0": 609.0910034179688,
+        "1": 642.6731567382812
+      },
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 75
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 23,
+      "type": "Prompt Template",
+      "pos": [
+        782.4729501037318,
+        404.5923923468688
+      ],
+      "size": {
+        "0": 380.399658203125,
+        "1": 92.37116241455078
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 17,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            45
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Prompt Template"
+      },
+      "widgets_values": [
+        "",
+        "Describe a beautiful picture in detail using one sentence of \"[prompt]\", please answer in English words only, skip the preamble."
+      ]
+    },
+    {
+      "id": 53,
+      "type": "Bedrock - Titan Variation",
+      "pos": [
+        1677.291604767913,
+        405.1573863837227
+      ],
+      "size": [
+        604.2682844083088,
+        222.00005626678467
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 87
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 84,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            75
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - Titan Variation"
+      },
+      "widgets_values": [
+        "winter background",
+        "",
+        0.7,
+        2,
+        8,
+        "1024 x 1024"
+      ]
+    },
+    {
+      "id": 34,
+      "type": "Bedrock - Claude",
+      "pos": [
+        780.4729501037318,
+        538.5923923468681
+      ],
+      "size": {
+        "0": 378.8060302734375,
+        "1": 154.25772094726562
+      },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 45,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            46,
+            79
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - Claude"
+      },
+      "widgets_values": [
+        "",
+        "anthropic.claude-3-haiku-20240307-v1:0",
+        200,
+        0.5,
+        1,
+        250
+      ]
+    },
+    {
+      "id": 54,
+      "type": "Prompt Template with Two Inputs",
+      "pos": [
+        1216.5480784964516,
+        404.19570547745906
+      ],
+      "size": [
+        404.66423241107736,
+        290.022945131279
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 79,
+          "widget": {
+            "name": "prompt"
+          }
+        },
+        {
+          "name": "prompt2",
+          "type": "STRING",
+          "link": 80,
+          "widget": {
+            "name": "prompt2"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            83
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Prompt Template with Two Inputs"
+      },
+      "widgets_values": [
+        "",
+        "",
+        "Input:\n\nCompulsory Image Description: \"[prompt]\"\nAdditional Image Description: \"[prompt2]\"\n\nOutput:\n\nCreate a new, detailed image description that integrates elements from both the compulsory image description and the additional image description. The new description should seamlessly blend these elements to form a cohesive and imaginative scene. The new description should be within 80 words."
+      ]
+    },
+    {
+      "id": 57,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1221.5480784964516,
+        1002.195705477459
+      ],
+      "size": [
+        392.39155662218354,
+        183.32943699397026
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 85,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "shape": 6
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "",
+        "A serene, snow-covered landscape is transformed into a fantastical realm, where a majestic suit of ornate, medieval-style armor stands tall, its intricate, decorative patterns and designs reflecting the muted colors of the winter wonderland. The armored figure is silhouetted against a pale, hazy sky, its reflection rippling across the frozen lake, creating a dreamlike, mystical atmosphere, as if the armor itself has come to life, guarding the tranquil, snow-blanketed scene."
+      ]
+    },
+    {
+      "id": 58,
+      "type": "Bedrock - Claude",
+      "pos": [
+        1219.5480784964516,
+        752.195705477459
+      ],
+      "size": [
+        394.5945656214815,
+        195.98452909570244
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 83,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            84,
+            85
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - Claude"
+      },
+      "widgets_values": [
+        "",
+        "anthropic.claude-3-haiku-20240307-v1:0",
+        2048,
+        0.5,
+        1,
+        250
+      ]
+    },
+    {
+      "id": 56,
+      "type": "ShowText|pysssss",
+      "pos": [
+        782,
+        1193
+      ],
+      "size": [
+        396.0398435155648,
+        166.52292354524025
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 78,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null,
+          "shape": 6
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "",
+        "The image depicts a suit of ornate, medieval-style armor. The armor is made of metal and features intricate, decorative patterns and designs across the various pieces, including the helmet, breastplate, gauntlets, and greaves. The armor appears to be highly detailed and ornamental, with a mix of silver and gold tones. The background shows a stained glass window with colorful, abstract patterns, creating a dramatic and mystical setting for the armored figure. The overall impression is one of grandeur, power, and a sense of historical or fantastical significance."
+      ]
+    },
+    {
+      "id": 5,
+      "type": "Text Multiline",
+      "pos": [
+        407,
+        363
+      ],
+      "size": [
+        312.95153317085123,
+        192.80745083192892
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            17
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "title": "Image Editing Prompt",
+      "properties": {
+        "Node name for S&R": "Text Multiline"
+      },
+      "widgets_values": [
+        "winter"
+      ]
+    },
+    {
+      "id": 60,
+      "type": "PreviewImage",
+      "pos": [
+        410,
+        794
+      ],
+      "size": [
+        317.37609160008424,
+        246
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 88
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 55,
+      "type": "Bedrock - Claude Multimodal",
+      "pos": [
+        780.043334015443,
+        944.2201450795236
+      ],
+      "size": {
+        "0": 400,
+        "1": 200
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 86
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            78,
+            80
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - Claude Multimodal"
+      },
+      "widgets_values": [
+        "describe the image",
+        "anthropic.claude-3-haiku-20240307-v1:0",
+        200,
+        0.5,
+        1,
+        250
+      ]
+    },
+    {
+      "id": 59,
+      "type": "Image From URL",
+      "pos": [
+        410,
+        637
+      ],
+      "size": {
+        "0": 315,
+        "1": 58
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            86,
+            87,
+            88
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Image From URL"
+      },
+      "widgets_values": [
+        "https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock/blob/main/assets/man_in_armor.png?raw=true"
+      ]
+    }
+  ],
+  "links": [
+    [
+      17,
+      5,
+      0,
+      23,
+      0,
+      "STRING"
+    ],
+    [
+      45,
+      23,
+      0,
+      34,
+      0,
+      "STRING"
+    ],
+    [
+      46,
+      34,
+      0,
+      8,
+      0,
+      "STRING"
+    ],
+    [
+      75,
+      53,
+      0,
+      33,
+      0,
+      "IMAGE"
+    ],
+    [
+      78,
+      55,
+      0,
+      56,
+      0,
+      "STRING"
+    ],
+    [
+      79,
+      34,
+      0,
+      54,
+      0,
+      "STRING"
+    ],
+    [
+      80,
+      55,
+      0,
+      54,
+      1,
+      "STRING"
+    ],
+    [
+      83,
+      54,
+      0,
+      58,
+      0,
+      "STRING"
+    ],
+    [
+      84,
+      58,
+      0,
+      53,
+      1,
+      "STRING"
+    ],
+    [
+      85,
+      58,
+      0,
+      57,
+      0,
+      "STRING"
+    ],
+    [
+      86,
+      59,
+      0,
+      55,
+      0,
+      "IMAGE"
+    ],
+    [
+      87,
+      59,
+      0,
+      53,
+      0,
+      "IMAGE"
+    ],
+    [
+      88,
+      59,
+      0,
+      60,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "Prompt Refinement (Bedrock Claude)",
+      "bounding": [
+        770,
+        330,
+        418,
+        521
+      ],
+      "color": "#b58b2a",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Generate Image Variations (Bedrock TitanImage)",
+      "bounding": [
+        1661,
+        330,
+        637,
+        1012
+      ],
+      "color": "#88A",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Image Caption (Bedrock Claude)",
+      "bounding": [
+        770,
+        870,
+        417,
+        507
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Merge description (Bedrock Claude)",
+      "bounding": [
+        1207,
+        330,
+        432,
+        863
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "locked": false
+    }
+  ],
+  "config": {},
+  "extra": {
+    "workspace_info": {
+      "id": "c350a89c-0edd-4bef-9fc6-f83c239228a8"
+    },
+    "ds": {
+      "scale": 0.6934334949441409,
+      "offset": [
+        -319.57743165392856,
+        -231.40832620048798
+      ]
+    }
+  },
+  "version": 0.4
+}

@@ -123,6 +123,16 @@ This workflow begins by using Bedrock Claude3 to refine the image editing prompt
 
 ![](./assets/example_generate_image_variation.webp)
 
+
+### Generate Image Variation with Image Caption
+Use natural language to generate variation of an image without re-describing the original image content.
+
+Download [this workflow file](workflows/variation_with_caption.json) and load in ComfyUI
+
+This workflow begins by using Bedrock Claude3 to refine the image editing prompt, generation caption of the original image, and merge the two image description into one. It then utilizes Bedrock Titan Image's variation feature to generate similar images based on the refined prompt.
+
+![](./assets/example_variation_with_caption.webp)
+
 ## Support models:
 
 Here are models ready for use, more models are coming soon.
