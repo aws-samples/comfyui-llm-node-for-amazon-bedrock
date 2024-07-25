@@ -211,8 +211,8 @@ class ImageOCRByTextractV3:
                     },
                 }
 
-    RETURN_TYPES = ("STRING","STRING","STRING","STRING","STRING","IMAGE")
-    RETURN_NAMES = ("Texts","x_offsets","y_offsets","widths","heights","AnyText Mask Image")
+    RETURN_TYPES = ("STRING","STRING","STRING","STRING","STRING","STRING","STRING","IMAGE","IMAGE")
+    RETURN_NAMES = ("Texts","x_offsets","y_offsets","widths","heights","img_width","img_height","Mask Image","Original Image")
     FUNCTION = "forward"
     CATEGORY = "aws"
     OUTPUT_NODE = True
@@ -242,9 +242,8 @@ class ImageOCRByTextractV3:
 
         # 初始化结果列表
         result = []
-        # 创建一个与原始图像大小相同的黑色遮罩图像
-        #mask = np.zeros_like(numpy_image)
-        mask = np.ones_like(numpy_image) * 255
+        # 创建一个与原始图像大小相同的遮罩图像
+        masked_img = numpy_image.copy()
         all_text=""
         x_offsets=[]
         y_offsets=[]
@@ -275,17 +274,14 @@ class ImageOCRByTextractV3:
                 result.append(text)
                 # 对每个文本信息框绘制mask遮罩
                 # 指定矩形框的左上角和右下角坐标
-                temp_mask = np.zeros_like(numpy_image)
                 x1, y1 = int(left), int(top)
                 x2, y2 = int(left + width), int(top + height)
                 # 在遮罩图像上绘制黑色矩形框
-                cv2.rectangle(temp_mask, (x1, y1), (x2, y2), (255, 255, 255), -1)
+                cv2.rectangle(masked_img, (x1, y1), (x2, y2), (0, 0, 0), -1)
 
 
-        # 将遮罩图像和原始图像进行位运算,生成遮罩后的图像
-        masked_img = np.where(mask == 0, 0, numpy_image)
-        #masked_img = cv2.bitwise_and(numpy_image, mask)
-        masked_img = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(0)
+        #masked_img = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(0)
+        masked_img = torch.from_numpy(masked_img.astype(np.float32) / 255.0).permute(2, 0, 1)
         #masked_img.save(temp_img_path)
         # 将 PyTorch 张量转换为 PIL 图像
         to_pil = transforms.ToPILImage()
@@ -302,7 +298,10 @@ class ImageOCRByTextractV3:
 
         print("result",result)
 
-        return all_text ,x_offsets,y_offsets,widths,heights, masked_img
+        # 添加原始图像输出
+        original_img = image_input
+
+        return all_text ,x_offsets,y_offsets,widths,heights,img_width,img_height, masked_img,original_img
 
 
 
