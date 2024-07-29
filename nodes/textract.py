@@ -205,10 +205,9 @@ class ImageOCRByTextractV3:
     def INPUT_TYPES(s):
         input_dir = folder_paths.get_input_directory()
         files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
-        return {"required":
-                  {
-                      "image": (sorted(files), {"image_upload": True}),
-                    },
+        return {"required":{
+                  "image": ("IMAGE",),
+                  }
                 }
 
     RETURN_TYPES = ("STRING","STRING","STRING","STRING","STRING","STRING","STRING","IMAGE","IMAGE")
@@ -218,19 +217,12 @@ class ImageOCRByTextractV3:
     OUTPUT_NODE = True
 
     def ocr_by_textract(self,image_input):
-        ori_image_path = folder_paths.get_annotated_filepath(image_input)
-
-        ## 转换ori_image为tensor张量
-        pil_image = Image.open(ori_image_path)
-        transform = transforms.Compose([
-            transforms.ToTensor(),  # 将 PIL Image 转换为 tensor，并将像素值归一化到 [0, 1]
-        ])
-        image_input = transform(pil_image)
 
         ## image input已经是标准comfyui的image张量格式
-        numpy_image = (image_input[0] * 255.0).clamp(0, 255).numpy()
         image = image_input[0] * 255.0
         image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
+        numpy_image = (image_input[0] * 255.0).clamp(0, 255).numpy()
+
         # 获取图像原始尺寸
         img_width, img_height = image.size
 
@@ -281,14 +273,7 @@ class ImageOCRByTextractV3:
 
 
         #masked_img = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(0)
-        masked_img = torch.from_numpy(masked_img.astype(np.float32) / 255.0).permute(2, 0, 1)
-        #masked_img.save(temp_img_path)
-        # 将 PyTorch 张量转换为 PIL 图像
-        to_pil = transforms.ToPILImage()
-        pil_image = to_pil(masked_img.squeeze(0))
-        # 保存 PIL 图像
-        pil_image.save(temp_img_path)
-
+        masked_img = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(0)
         ###汇总结果输出
         all_text="|".join(result)
         x_offsets="|".join(x_offsets)
