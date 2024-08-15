@@ -44,7 +44,16 @@ class ImageFromURL:
         return image
 
     def download_http(self, url):
-        request = requests.get(url)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1",
+            "Cache-Control": "max-age=0",
+        }
+        request = requests.get(url, headers=headers)
         image = Image.open(BytesIO(request.content))
         image = torch.from_numpy(np.array(image).astype(np.float32) / 255.0).unsqueeze(
             0

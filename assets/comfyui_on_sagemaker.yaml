@@ -1,120 +1,264 @@
-# https://s3.us-east-1.amazonaws.com/cf-templates-vjd79wfufmbo-us-east-1/2024-01-13T055853.062Zujj-comfyui.yaml
 AWSTemplateFormatVersion: 2010-09-09
-Description: >-
-  Sagemaker Jupyter Notebook for ComfyUI
-Parameters : 
-  InstanceType: 
-    Description : SageMaker EC2 instance type
-    Type : String
-    Default : ml.g5.2xlarge
-    AllowedValues :
-           - ml.g5.2xlarge
-           - ml.g5.4xlarge
-           - ml.g5.8xlarge
-           - ml.g6.2xlarge
-           - ml.g6.4xlarge
-           - ml.g6.8xlarge
-    ConstraintDescription : Must be a valid EC2 instance type 
+Description: Sagemaker Jupyter Notebook for ComfyUI
+Parameters:
+  InstanceType:
+    Description: SageMaker EC2 instance type
+    Type: String
+    Default: ml.g5.2xlarge
+    AllowedValues:
+      - ml.g5.2xlarge
+      - ml.g5.4xlarge
+      - ml.g5.8xlarge
+      - ml.g6.2xlarge
+      - ml.g6.4xlarge
+      - ml.g6.8xlarge
+    ConstraintDescription: Must be a valid EC2 instance type
   Volume:
     Type: String
     Description: Enter number of volume size(GB)
     Default: 200
 
 Resources:
-  ExecutionRole: 
-    Type: "AWS::IAM::Role"
-    Properties: 
-      #RoleName: "sagemaker-notebook-webui-role"
-      AssumeRolePolicyDocument: 
-        Version: "2012-10-17"
-        Statement: 
-        - 
-          Effect: "Allow"
-          Principal: 
-            Service: 
-              - "sagemaker.amazonaws.com"
-          Action: 
-          - "sts:AssumeRole"
-      Path: "/"
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - sagemaker.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
       ManagedPolicyArns:
-        - "arn:aws:iam::aws:policy/AmazonSageMakerFullAccess"
-        - "arn:aws:iam::aws:policy/AmazonBedrockFullAccess"
+        - arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
+        - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
   NotebookInstance:
     Type: AWS::SageMaker::NotebookInstance
     Properties:
       InstanceType: !Ref InstanceType
       LifecycleConfigName: !GetAtt LifeCycleConfig.NotebookInstanceLifecycleConfigName
-      #NotebookInstanceName: !Ref AWS::StackName
+      NotebookInstanceName: !Ref AWS::StackName
       RoleArn: !GetAtt ExecutionRole.Arn
+      KmsKeyId: !GetAtt KMSKey.KeyId
+      DirectInternetAccess: Disabled
+      SubnetId: !Ref PrivateSubnet1
+      SecurityGroupIds:
+        - !Ref PrivateSecurityGroup
       VolumeSizeInGB: !Ref Volume
       Tags:
-        - Key: "Managed"
-          Value: "cloudformation"
+        - Key: Managed
+          Value: cloudformation
 
   LifeCycleConfig:
     Type: AWS::SageMaker::NotebookInstanceLifecycleConfig
     Properties:
       OnCreate:
-        - Content: 
-            Fn::Base64: 
-              !Sub |
-                #!/bin/bash
-
-                set -ex
-                sudo -u ec2-user -i << EOF
-                # install comfyui
-                cd ~/SageMaker
-                git clone https://github.com/comfyanonymous/ComfyUI.git
-                cd ComfyUI/custom_nodes/
-                git clone https://github.com/ltdrdata/ComfyUI-Manager.git
-                git clone https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock.git
-                git clone https://github.com/WASasquatch/was-node-suite-comfyui.git
-                git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git
-
-                cd ~/SageMaker/ComfyUI
-                source activate pytorch_p310
-                python3 -mpip install -r requirements.txt
-
-                cd ~/SageMaker/ComfyUI/custom_nodes/comfyui-llm-node-for-amazon-bedrock
-                python3 -mpip install -r requirements.txt
-
-                # start comfyui in background
-                cat > ~/SageMaker/start_comfyui.sh << EOF0
-                #! /bin/bash
-                cd ~/SageMaker/ComfyUI
-                source activate pytorch_p310
-                python3 main.py
-                EOF0
-
-                chmod +x ~/SageMaker/start_comfyui.sh
-                EOF
+        - Content: !Base64
+            Fn::Sub: |
+              #!/bin/bash
+              set -ex
+              sudo -u ec2-user -i << EOF
+              cat > ~/SageMaker/start_comfyui.sh << EOF0
+              #!/bin/bash
+              # install comfyui
+              cd ~/SageMaker
+              git clone https://github.com/comfyanonymous/ComfyUI.git
+              cd ComfyUI/custom_nodes/
+              git clone https://github.com/ltdrdata/ComfyUI-Manager.git
+              git clone https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock.git
+              git clone https://github.com/WASasquatch/was-node-suite-comfyui.git
+              git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git
+              cd ~/SageMaker/ComfyUI
+              source activate pytorch_p310
+              python3 -mpip install -r requirements.txt
+              cd ~/SageMaker/ComfyUI/custom_nodes/comfyui-llm-node-for-amazon-bedrock
+              python3 -mpip install -r requirements.txt
+              # start comfyui in background
+              cd ~/SageMaker/ComfyUI
+              source activate pytorch_p310
+              python3 main.py
+              EOF0
+              chmod +x ~/SageMaker/start_comfyui.sh
+              EOF
       OnStart:
-        - Content: 
-            Fn::Base64: 
-              !Sub |
-                #!/bin/bash
-                set -ex
-                sudo -u ec2-user -i << EOF
-                screen -dmS comfyui ~/SageMaker/start_comfyui.sh
-                EOF
+        - Content: !Base64
+            Fn::Sub: |
+              #!/bin/bash
+              set -ex
+              sudo -u ec2-user -i << EOF
+              screen -dmS comfyui ~/SageMaker/start_comfyui.sh
+              EOF
+  KMSKey:
+    Type: AWS::KMS::Key
+    Properties:
+      EnableKeyRotation: true
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs ''
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Public Subnet 1
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs ''
+      CidrBlock: 10.0.2.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
+  PublicRoute0:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/1
+      GatewayId: !Ref InternetGateway
+
+  PublicRoute1:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 128.0.0.0/1
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
+
+  NatGatewayEIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGatewayEIP.AllocationId
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
+  PrivateRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+
+  PrivateSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateSubnet1
+
+  PrivateSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for private subnet
+      VpcId: !Ref VPC
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          Description: A
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/1
+        - IpProtocol: tcp
+          Description: A
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/1
+        - IpProtocol: tcp
+          Description: BCDE
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 128.0.0.0/1
+        - IpProtocol: tcp
+          Description: BCDE
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 128.0.0.0/1
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
 Outputs:
   ComfyUIURL:
     Description: ComfyUI URL
     Value: !Join
-        - ''
-        - - https://
-          - !GetAtt 'NotebookInstance.NotebookInstanceName'
-          - .notebook.
-          - !Ref 'AWS::Region'
-          - .sagemaker.aws/proxy/8188/
+      - ''
+      - - https://
+        - !GetAtt NotebookInstance.NotebookInstanceName
+        - .notebook.
+        - !Ref AWS::Region
+        - .sagemaker.aws/proxy/8188/
   NotebookURL:
     Description: SageMaker Notebook Instance URL.
     Value: !Join
-        - ''
-        - - https://
-          - !Ref 'AWS::Region'
-          - .console.aws.amazon.com/sagemaker/home?region=
-          - !Ref 'AWS::Region'
-          - '#/notebook-instances/openNotebook/'
-          - !GetAtt 'NotebookInstance.NotebookInstanceName'
-          - '?view=lab'
+      - ''
+      - - https://
+        - !Ref AWS::Region
+        - .console.aws.amazon.com/sagemaker/home?region=
+        - !Ref AWS::Region
+        - '#/notebook-instances/openNotebook/'
+        - !GetAtt NotebookInstance.NotebookInstanceName
+        - '?view=lab'
