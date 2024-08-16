@@ -15,6 +15,9 @@ import folder_paths
 from .session import get_client
 import torch
 from torchvision import transforms
+from paddleocr import PaddleOCR, draw_ocr
+from paddleocr import PPStructure,draw_structure_result
+import tempfile
 
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -199,6 +202,116 @@ class ImageOCRByTextractV2:
 
 
 ## for layer style nodes
+class ImageOCRByTextractV4:
+
+    @classmethod
+    def INPUT_TYPES(s):
+        input_dir = folder_paths.get_input_directory()
+        files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
+        return {"required":{
+                  "image": ("IMAGE",),
+                  }
+                }
+
+    RETURN_TYPES = ("STRING","STRING","STRING","STRING","STRING","STRING","STRING","IMAGE","IMAGE")
+    RETURN_NAMES = ("Texts","x_offsets","y_offsets","widths","heights","img_width","img_height","Mask Image","Original Image")
+    FUNCTION = "forward"
+    CATEGORY = "aws"
+    OUTPUT_NODE = True
+
+    def convert_to_xywh(coordinates):
+        # 提取所有的 x 和 y 坐标
+        x_coords = [coord[0] for coord in coordinates]
+        y_coords = [coord[1] for coord in coordinates]
+
+        # 计算 x offset 和 y offset
+        x_offset = min(x_coords)
+        y_offset = min(y_coords)
+
+        # 计算 width 和 height
+        width = max(x_coords) - x_offset
+        height = max(y_coords) - y_offset
+
+        return x_offset, y_offset, width, height
+
+    def ocr_by_paddleocr(self,image_input):
+
+        ## image input已经是标准comfyui的image张量格式
+        image = image_input[0] * 255.0
+        image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
+        numpy_image = (image_input[0] * 255.0).clamp(0, 255).numpy()
+
+
+        # 创建临时文件
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.png', dir='/tmp/') as temp_file:
+            temp_filename = temp_file.name
+
+        # 保存numpy_image为临时文件
+        cv2.imwrite(temp_filename, cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR))
+
+        ocr = PaddleOCR(
+        det_model_dir='/home/ubuntu/ComfyUI/models/checkpoints/PaddleOCR/det',
+        rec_model_dir='/home/ubuntu/ComfyUI/models/checkpoints/PaddleOCR/rec',
+        det_limit_side_len=2048,
+        use_angle_cls=True,
+        #use_gpu=False,
+        )
+
+        result = ocr.ocr(temp_filename, cls=True)[0]
+
+        # 创建一个与原始图像大小相同的遮罩图像
+        masked_img = numpy_image.copy()
+        all_text=""
+        x_offsets=[]
+        y_offsets=[]
+        widths=[]
+        heights=[]
+
+
+        # 提取文本和边界框信息
+        for line in result:
+             boxes = line[0]
+             x_offset,y_offset,width,height = convert_to_xywh(boxes)
+             x_offsets.append(str(x_offset))
+             y_offsets.append(str(y_offset))
+             widths.append(str(width))
+             heights.append(str(height))
+
+             text = line[1][0]
+             result.append(text)
+
+             # 对每个文本信息框绘制mask遮罩
+             # 指定矩形框的左上角和右下角坐标
+             x1, y1 = int(x_offset), int(y_offset)
+             x2, y2 = int(x_offset + width), int(y_offset + height)
+             # 在遮罩图像上绘制黑色矩形框
+             cv2.rectangle(masked_img, (x1, y1), (x2, y2), (0, 0, 0), -1)
+
+        masked_img = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(0)
+        ###汇总结果输出
+        all_text="|".join(result)
+        x_offsets="|".join(x_offsets)
+        y_offsets="|".join(y_offsets)
+        widths="|".join(widths)
+        heights="|".join(heights)
+
+        print("result",result)
+
+        # 添加原始图像输出
+        original_img = image_input
+        # 删除临时文件
+        os.unlink(temp_filename)
+
+        return all_text ,x_offsets,y_offsets,widths,heights,img_width,img_height, masked_img,original_img
+
+
+
+    @retry(tries=MAX_RETRY)
+    def forward(self, image):
+        return self.ocr_by_paddleocr(image)
+
+
+## for layer style nodes
 class ImageOCRByTextractV3:
 
     @classmethod
@@ -294,9 +407,11 @@ class ImageOCRByTextractV3:
     def forward(self, image):
         return self.ocr_by_textract(image)
 
+
 NODE_CLASS_MAPPINGS = {
     "Image OCR By Textract": ImageOCRByTextract,
     "Image OCR By Textract V2":ImageOCRByTextractV2,
-    "Image OCR By Textract V3":ImageOCRByTextractV3
+    "Image OCR By Textract V3":ImageOCRByTextractV3,
+    "Image OCR by PaddleOCR": ImageOCRByTextractV4
 }
 
