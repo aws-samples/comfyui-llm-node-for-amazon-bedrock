@@ -219,7 +219,7 @@ class ImageOCRByTextractV4:
     CATEGORY = "aws"
     OUTPUT_NODE = True
 
-    def convert_to_xywh(coordinates):
+    def convert_to_xywh(self,coordinates):
         # 提取所有的 x 和 y 坐标
         x_coords = [coord[0] for coord in coordinates]
         y_coords = [coord[1] for coord in coordinates]
@@ -232,7 +232,8 @@ class ImageOCRByTextractV4:
         width = max(x_coords) - x_offset
         height = max(y_coords) - y_offset
 
-        return x_offset, y_offset, width, height
+        print(x_offset,y_offset,width,height)
+        return int(x_offset), int(y_offset), int(width), int(height)
 
     def ocr_by_paddleocr(self,image_input):
 
@@ -240,6 +241,9 @@ class ImageOCRByTextractV4:
         image = image_input[0] * 255.0
         image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
         numpy_image = (image_input[0] * 255.0).clamp(0, 255).numpy()
+
+        # 获取图像原始尺寸
+        img_width, img_height = image.size
 
 
         # 创建临时文件
@@ -257,9 +261,10 @@ class ImageOCRByTextractV4:
         #use_gpu=False,
         )
 
-        result = ocr.ocr(temp_filename, cls=True)[0]
+        ocr_results = ocr.ocr(temp_filename, cls=True)[0]
 
         # 创建一个与原始图像大小相同的遮罩图像
+        result = []
         masked_img = numpy_image.copy()
         all_text=""
         x_offsets=[]
@@ -269,15 +274,19 @@ class ImageOCRByTextractV4:
 
 
         # 提取文本和边界框信息
-        for line in result:
+        for line in ocr_results:
+             if not isinstance(line, list):
+                continue
              boxes = line[0]
-             x_offset,y_offset,width,height = convert_to_xywh(boxes)
+             x_offset,y_offset,width,height = self.convert_to_xywh(boxes)
              x_offsets.append(str(x_offset))
              y_offsets.append(str(y_offset))
              widths.append(str(width))
              heights.append(str(height))
 
              text = line[1][0]
+             print("text")
+             print(text)
              result.append(text)
 
              # 对每个文本信息框绘制mask遮罩
