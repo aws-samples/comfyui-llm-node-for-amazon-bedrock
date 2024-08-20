@@ -12,7 +12,7 @@ def get_client(service_name, clients={}):
         return clients[service_name]
 
     try:
-        clients[service_name] = boto3.client(service_name=service_name)
+        clients[service_name] = boto3.client(service_name=service_name, region_name='us-east-1')
     except Exception as e:
         # get region from gateway
         response = requests.put(
