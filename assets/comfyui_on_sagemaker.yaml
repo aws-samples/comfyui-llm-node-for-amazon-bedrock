@@ -65,7 +65,7 @@ Resources:
               #!/bin/bash
               # install comfyui
               cd ~/SageMaker
-              git clone https://github.com/comfyanonymous/ComfyUI.git
+              git clone https://github.com/comfyanonymous/ComfyUI.git --branch v0.0.8
               cd ComfyUI/custom_nodes/
               git clone https://github.com/ltdrdata/ComfyUI-Manager.git
               git clone https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock.git
