@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-llm-node-for-amazon-bedrock"
+description = "Amazon Bedrock is a fully managed service that offers a choice of high-performing foundation models (FMs) from leading AI companies. This repo is the ComfyUI nodes for Bedrock service. You could invoke the foundation model in your ComfyUI pipeline."
+version = "1.0.0"
+license = "LICENSE"
+dependencies = ["boto3", "requests", "retry"]
+
+[project.urls]
+Repository = "https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "comfyui-llm-node-for-amazon-bedrock"
+Icon = ""
