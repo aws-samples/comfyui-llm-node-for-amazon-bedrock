@@ -1,0 +1,701 @@
+{
+  "last_node_id": 52,
+  "last_link_id": 83,
+  "nodes": [
+    {
+      "id": 25,
+      "type": "PreviewImage",
+      "pos": [
+        1789,
+        644
+      ],
+      "size": {
+        "0": 210,
+        "1": 246
+      },
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 47
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 23,
+      "type": "Image OCR By Textract",
+      "pos": [
+        -654,
+        420
+      ],
+      "size": {
+        "0": 210,
+        "1": 126
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 36
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Text",
+          "type": "STRING",
+          "links": [
+            38
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "Left",
+          "type": "INT",
+          "links": [],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "Top",
+          "type": "INT",
+          "links": [],
+          "shape": 3,
+          "slot_index": 2
+        },
+        {
+          "name": "Width",
+          "type": "INT",
+          "links": [],
+          "shape": 3,
+          "slot_index": 3
+        },
+        {
+          "name": "Height",
+          "type": "INT",
+          "links": [],
+          "shape": 3,
+          "slot_index": 4
+        },
+        {
+          "name": "Mask Image",
+          "type": "IMAGE",
+          "links": [
+            49
+          ],
+          "shape": 3,
+          "slot_index": 5
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Image OCR By Textract"
+      }
+    },
+    {
+      "id": 15,
+      "type": "Bedrock - Claude",
+      "pos": [
+        -322,
+        948
+      ],
+      "size": {
+        "0": 400,
+        "1": 200
+      },
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 30,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            59
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - Claude"
+      },
+      "widgets_values": [
+        "",
+        "anthropic.claude-3-haiku-20240307-v1:0",
+        2048,
+        1,
+        1,
+        71
+      ]
+    },
+    {
+      "id": 40,
+      "type": "String",
+      "pos": [
+        347,
+        1165
+      ],
+      "size": {
+        "0": 315,
+        "1": 58
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            58
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "String"
+      },
+      "widgets_values": [
+        "Yes"
+      ]
+    },
+    {
+      "id": 48,
+      "type": "MaskPreview+",
+      "pos": [
+        756,
+        302
+      ],
+      "size": {
+        "0": 210,
+        "1": 246
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 69
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskPreview+"
+      }
+    },
+    {
+      "id": 39,
+      "type": "Compare",
+      "pos": [
+        757,
+        1079
+      ],
+      "size": {
+        "0": 315,
+        "1": 78
+      },
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "a",
+          "type": "*",
+          "link": 59
+        },
+        {
+          "name": "b",
+          "type": "*",
+          "link": 58
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "type": "BOOLEAN",
+          "links": [
+            78
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Compare"
+      },
+      "widgets_values": [
+        "a == b"
+      ]
+    },
+    {
+      "id": 32,
+      "type": "ImageToMask",
+      "pos": [
+        -296,
+        518
+      ],
+      "size": {
+        "0": 315,
+        "1": 58
+      },
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 49
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            50,
+            79
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageToMask"
+      },
+      "widgets_values": [
+        "green"
+      ]
+    },
+    {
+      "id": 51,
+      "type": "If ANY execute A else B",
+      "pos": [
+        947,
+        648
+      ],
+      "size": {
+        "0": 210,
+        "1": 66
+      },
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "ANY",
+          "type": "*",
+          "link": 78
+        },
+        {
+          "name": "IF_TRUE",
+          "type": "*",
+          "link": 79
+        },
+        {
+          "name": "IF_FALSE",
+          "type": "*",
+          "link": 80
+        }
+      ],
+      "outputs": [
+        {
+          "name": "?",
+          "type": "*",
+          "links": [
+            81
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "If ANY execute A else B"
+      }
+    },
+    {
+      "id": 24,
+      "type": "LayerUtility: LaMa",
+      "pos": [
+        1384,
+        959
+      ],
+      "size": {
+        "0": 315,
+        "1": 174
+      },
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 83
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 81,
+          "slot_index": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            47
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LayerUtility: LaMa"
+      },
+      "widgets_values": [
+        "lama",
+        "cuda",
+        false,
+        25,
+        6
+      ]
+    },
+    {
+      "id": 47,
+      "type": "SolidMask",
+      "pos": [
+        -312,
+        227
+      ],
+      "size": {
+        "0": 315,
+        "1": 106
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            69,
+            80
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SolidMask"
+      },
+      "widgets_values": [
+        0,
+        1000,
+        662
+      ]
+    },
+    {
+      "id": 33,
+      "type": "MaskPreview+",
+      "pos": [
+        511,
+        394
+      ],
+      "size": {
+        "0": 210,
+        "1": 246
+      },
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 50
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskPreview+"
+      }
+    },
+    {
+      "id": 17,
+      "type": "Prompt Template",
+      "pos": [
+        -400,
+        648
+      ],
+      "size": {
+        "0": 521.4636840820312,
+        "1": 208.76742553710938
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 38,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            30
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Prompt Template"
+      },
+      "widgets_values": [
+        "",
+        "判断如下文本中是否包含暴力，恐怖，色情，政治的内容\n[prompt]\n如果包含，返回\"Yes\", 否则返回\"No\"\n直接返回结果，不要包含其他任务内容"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "LoadImage",
+      "pos": [
+        -1091,
+        346
+      ],
+      "size": {
+        "0": 315,
+        "1": 314
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            36,
+            82
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [],
+          "shape": 3,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "textract_demo005 (1).png",
+        "image"
+      ]
+    },
+    {
+      "id": 52,
+      "type": "Reroute",
+      "pos": [
+        726.544712798572,
+        819.4428242873535
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 82
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "IMAGE",
+          "links": [
+            83
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "showOutputText": false,
+        "horizontal": false
+      }
+    }
+  ],
+  "links": [
+    [
+      30,
+      17,
+      0,
+      15,
+      0,
+      "STRING"
+    ],
+    [
+      36,
+      4,
+      0,
+      23,
+      0,
+      "IMAGE"
+    ],
+    [
+      38,
+      23,
+      0,
+      17,
+      0,
+      "STRING"
+    ],
+    [
+      47,
+      24,
+      0,
+      25,
+      0,
+      "IMAGE"
+    ],
+    [
+      49,
+      23,
+      5,
+      32,
+      0,
+      "IMAGE"
+    ],
+    [
+      50,
+      32,
+      0,
+      33,
+      0,
+      "MASK"
+    ],
+    [
+      58,
+      40,
+      0,
+      39,
+      1,
+      "*"
+    ],
+    [
+      59,
+      15,
+      0,
+      39,
+      0,
+      "*"
+    ],
+    [
+      69,
+      47,
+      0,
+      48,
+      0,
+      "MASK"
+    ],
+    [
+      78,
+      39,
+      0,
+      51,
+      0,
+      "*"
+    ],
+    [
+      79,
+      32,
+      0,
+      51,
+      1,
+      "*"
+    ],
+    [
+      80,
+      47,
+      0,
+      51,
+      2,
+      "*"
+    ],
+    [
+      81,
+      51,
+      0,
+      24,
+      1,
+      "MASK"
+    ],
+    [
+      82,
+      4,
+      0,
+      52,
+      0,
+      "*"
+    ],
+    [
+      83,
+      52,
+      0,
+      24,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.7513148009015782,
+      "offset": {
+        "0": -256.5145409235732,
+        "1": -365.5770235061039
+      }
+    }
+  },
+  "version": 0.4
+}
