@@ -92,8 +92,7 @@ class BedrockNovaTextImage:
         # For the format, ranges, and default values for Titan Image models refer to:
         # https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-titan-image.html
 
-        inference_params =
-        {
+        inference_params ={
                 "taskType": "TEXT_IMAGE",
                 "textToImageParams": {"text": prompt},
                 "imageGenerationConfig": {
