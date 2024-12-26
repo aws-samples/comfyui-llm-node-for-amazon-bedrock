@@ -4,8 +4,6 @@ import re
 import base64
 from io import BytesIO
 from random import randint
-import nova_image_gen
-import file_utils
 import logging
 from datetime import datetime
 import requests
@@ -14,11 +12,104 @@ from PIL import Image
 import numpy as np
 import torch
 from .session import get_client
+import boto3
 
 MAX_RETRY = 3
 
-bedrock_runtime_client = get_client(service_name="bedrock-runtime")
+def generate_images(
+    inference_params,
+    model_id="amazon.nova-canvas-v1:0",
+    region_name="us-east-1",
+    endpoint_url=None,
+    output_directory="~/ComfyUI/output",
+):
+    
+    os.makedirs(output_directory, exist_ok=True)
 
+    image_count = 1
+    if "imageGenerationConfig" in inference_params:
+        if "numberOfImages" in inference_params["imageGenerationConfig"]:
+            image_count = inference_params["imageGenerationConfig"]["numberOfImages"]
+
+    print(f"Generating {image_count} image(s) with {model_id}")
+
+    # Display the seed value if one is being used.
+    if "imageGenerationConfig" in inference_params:
+        if "seed" in inference_params["imageGenerationConfig"]:
+            print(
+                f"Using seed: {inference_params['imageGenerationConfig']['seed']}"
+            )
+
+    bedrock_client_optional_args = (
+        {} if endpoint_url is None else {"endpoint_url": endpoint_url}
+    )
+    bedrock = boto3.client(
+        service_name="bedrock-runtime",
+        region_name=region_name,
+        **bedrock_client_optional_args,
+    )
+
+    body_json = json.dumps(inference_params, indent=2)
+    print("here1===",body_json)
+
+    # Write request body to JSON file.
+    request_file_path = os.path.join(output_directory, "request.json")
+    with open(request_file_path, "w") as f:
+        f.write(body_json)
+
+    try:
+        response = bedrock.invoke_model(
+            body=body_json,
+            modelId=model_id,
+            accept="application/json",
+            contentType="application/json",
+        )
+
+        response_metadata = response.get("ResponseMetadata")
+        # WRite response metadata to JSON file.
+        response_metadata_file_path = os.path.join(
+            output_directory, "response_metadata.json"
+        )
+        with open(response_metadata_file_path, "w") as f:
+            json.dump(response_metadata, f, indent=2)
+
+        response_body = json.loads(response.get("body").read())
+
+        # Write response body to JSON file.
+        response_file_path = os.path.join(output_directory, "response_body.json")
+        with open(response_file_path, "w") as f:
+            json.dump(response_body, f, indent=2)
+
+        # Log the request ID.
+        print(f"Request ID: {response['ResponseMetadata']['RequestId']}")
+
+        # Check for non-exception errors.
+        if "error" in response_body:
+            if response_body["error"] == "":
+                print(
+                    """Response included 'error' of "" (empty string). This indicates a bug with the Bedrock API."""
+                )
+            else:
+                printf("Error: {response_body['error']}")
+
+        return response_body
+
+    except Exception as e:
+        # If e has "response", write it to disk as JSON.
+        if hasattr(e, "response"):
+            error_response = e.response
+            error_response_file_path = os.path.join(
+                output_directory, "error_response.json"
+            )
+            with open(error_response_file_path, "w") as f:
+                json.dump(error_response, f, indent=2)
+
+        print(e)
+        raise e
+
+
+bedrock_runtime_client = get_client(service_name="bedrock-runtime")
+output_directory = "/home/ubuntu/ComfyUI/output/"
 class BedrockNovaTextImage:
     @classmethod
     def INPUT_TYPES(s):
@@ -76,6 +167,9 @@ class BedrockNovaTextImage:
                         "display": "number",
                     },
                 ),
+            },
+            "optional": {
+                "negative_prompt":(("STRING", {"multiline": True}),)
             }
         }
 
@@ -84,17 +178,14 @@ class BedrockNovaTextImage:
     CATEGORY = "aws"
 
     @retry(tries=MAX_RETRY)
-    def forward(self, prompt, num_images, quality, resolution, cfg_scale, seed):
+    def forward(self, prompt, negative_prompt,num_images, quality, resolution, cfg_scale, seed):
 
         height, width = map(int, re.findall(r"\d+", resolution))
 
-        # The different model providers have individual request and response formats.
-        # For the format, ranges, and default values for Titan Image models refer to:
-        # https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-titan-image.html
-
         inference_params ={
                 "taskType": "TEXT_IMAGE",
-                "textToImageParams": {"text": prompt},
+                "textToImageParams": {"text": prompt,
+                                      "negativeText":negative_prompt},
                 "imageGenerationConfig": {
                     "numberOfImages": num_images,
                     "quality": quality,
@@ -110,7 +201,7 @@ class BedrockNovaTextImage:
         output_directory = f"output/{generation_id}"
 
         # Generate the image(s).
-        response = nova_image_gen.generate_images(
+        response = generate_images(
             inference_params=inference_params,
             model_id="amazon.nova-canvas-v1:0",
             output_directory=output_directory
@@ -204,7 +295,7 @@ class BedrockNovaIpAdatper:
     CATEGORY = "aws"
 
     @retry(tries=MAX_RETRY)
-    def forward(self, image, prompt, negative_prompt, similarity_strength, num_images, cfg_scale, resolution):
+    def forward(self, image, prompt, negative_prompt, similarity_strength, num_images, cfg_scale, resolution,seed):
 
         image = image[0] * 255.0
         image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
@@ -218,14 +309,9 @@ class BedrockNovaIpAdatper:
 
         image_base64 = base64.b64encode(image_data).decode("utf-8")
 
-        # The different model providers have individual request and response formats.
-        # For the format, ranges, and default values for Titan Image models refer to:
-        # https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-titan-image.html
-
-        # add a key value to json only when the a parameter is not empty
         inference_params = {
                 "taskType": "IMAGE_VARIATION",
-                "inPaintingParams": {
+                "imageVariationParams": {
                     "image": image_base64,                         
                     "text": prompt,
                     "negativeText": negative_prompt,        
@@ -241,7 +327,7 @@ class BedrockNovaIpAdatper:
                 }
             }
         
-        response_body = nova_image_gen.generate_images(
+        response_body = generate_images(
             inference_params=inference_params,
             model_id="amazon.nova-canvas-v1:0",
             output_directory=output_directory
@@ -311,7 +397,7 @@ class BedrockNovaBackgroundPEReplace:
     CATEGORY = "aws"
 
     @retry(tries=MAX_RETRY)
-    def forward(self, image, prompt, mask_prompt, num_images, cfg_scale):
+    def forward(self, image, prompt, mask_prompt, num_images, cfg_scale,seed):
         image = image[0] * 255.0
         image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
 
@@ -325,7 +411,7 @@ class BedrockNovaBackgroundPEReplace:
 
         inference_params = {
                 "taskType": "OUTPAINTING",
-                "inPaintingParams": {
+                "outPaintingParams": {
                     "image": image_base64,
                     "text": prompt,
                     "maskPrompt": mask_prompt,
@@ -339,7 +425,7 @@ class BedrockNovaBackgroundPEReplace:
                 }
             }
 
-        response_body = nova_image_gen.generate_images(
+        response_body = generate_images(
             inference_params=inference_params,
             model_id="amazon.nova-canvas-v1:0",
             output_directory=output_directory
