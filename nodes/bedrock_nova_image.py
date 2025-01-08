@@ -45,12 +45,12 @@ def generate_images(
     )
     bedrock = boto3.client(
         service_name="bedrock-runtime",
-        region_name=region_name,
+        #region_name=region_name,
         **bedrock_client_optional_args,
     )
 
     body_json = json.dumps(inference_params, indent=2)
-    print("here1===",body_json)
+    #print("here1===",body_json)
 
     # Write request body to JSON file.
     request_file_path = os.path.join(output_directory, "request.json")
@@ -312,7 +312,7 @@ class BedrockNovaIpAdatper:
         inference_params = {
                 "taskType": "IMAGE_VARIATION",
                 "imageVariationParams": {
-                    "image": image_base64,                         
+                    "images": [image_base64],                         
                     "text": prompt,
                     "negativeText": negative_prompt,        
                     "similarityStrength": similarity_strength,

@@ -26,6 +26,25 @@ def get_account_id():
     sts_client = boto3.client('sts')
     return sts_client.get_caller_identity().get('Account')
 
+def is_video_downloaded_for_invocation_job(invocation_job, output_folder="output"):
+    """
+    This function checks if the video file for the given invocation job has been downloaded.
+    """
+    invocation_arn = invocation_job["invocationArn"]
+    invocation_id = invocation_arn.split("/")[-1]
+    folder_name = get_folder_name_for_job(invocation_job)
+    output_folder = os.path.abspath(f"{output_folder}/{folder_name}")
+    file_name = f"{invocation_id}.mp4"
+    local_file_path = os.path.join(output_folder, file_name)
+    return os.path.exists(local_file_path)
+
+def get_folder_name_for_job(invocation_job):
+    invocation_arn = invocation_job["invocationArn"]
+    invocation_id = invocation_arn.split("/")[-1]
+    submit_time = invocation_job["submitTime"]
+    timestamp = submit_time.astimezone().strftime("%Y-%m-%d_%H-%M-%S")
+    folder_name = f"{timestamp}_{invocation_id}"
+    return folder_name
 
 def download_video_for_invocation_arn(invocation_arn, bucket_name, destination_folder):
     """
@@ -95,7 +114,7 @@ def save_completed_job(job, output_folder="output"):
 bedrock_runtime_client = get_client(service_name="bedrock-runtime")
 region = get_default_region()
 account_id = get_account_id()
-s3_destination_bucket = f"sagemaker-{region}-{account-id}"
+s3_destination_bucket = f"sagemaker-{region}-{account_id}"
 
 class BedrockNovaVideo:
     @classmethod
@@ -105,7 +124,7 @@ class BedrockNovaVideo:
                 "prompt": ("STRING", {"multiline": True}),
                 "dimension": (
                     [
-                        "1024 x 720"
+                        "1280x720"
                     ],
                 ),
                 "seed": (
@@ -130,9 +149,9 @@ class BedrockNovaVideo:
     CATEGORY = "aws"
 
     @retry(tries=MAX_RETRY)
-    def forward(self, image, prompt, dimension,seed):
+    def forward(self, prompt, dimension,seed,image):
         input_image_base64=None
-        if image:
+        if image is not None:
             image = image[0] * 255.0
             image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
             buffer = BytesIO()
@@ -144,7 +163,7 @@ class BedrockNovaVideo:
         model_input = {
             "taskType": "TEXT_VIDEO",
             "textToVideoParams": {
-                "text": video_prompt,
+                "text": prompt,
                 "images": [
                     {
                         "format": "png",  # May be "png" or "jpeg"
@@ -163,8 +182,8 @@ class BedrockNovaVideo:
         }
         
         
-        invocation = bedrock_runtime.start_async_invoke(
-        modelId="amazon.olympus-video-generator-v1:0",
+        invocation = bedrock_runtime_client.start_async_invoke(
+        modelId="amazon.nova-reel-v1:0",
         modelInput=model_input,
         outputDataConfig={"s3OutputDataConfig": {"s3Uri": f"s3://{s3_destination_bucket}"}},
     )
@@ -177,14 +196,20 @@ class BedrockNovaVideo:
     
         # Save the invocation details for later reference. Helpful for debugging and reporting feedback.
         while True:
-            job_update = bedrock_runtime.get_async_invoke(invocationArn=invocation_arn)
+            job_update = bedrock_runtime_client.get_async_invoke(invocationArn=invocation_arn)
             status = job_update["status"]
+            start_time = time.time()
 
             if status == "Completed":
                 save_local_path = save_completed_job(job_update, output_folder="/home/ubuntu/ComfyUI/output/")
                 break
             else:
-                time.sleep(5)
+                elapsed_time = time.time() - start_time
+                if elapsed_time > 600:
+                    print("Job timed out after 60 seconds.")
+                    break
+                else:
+                    time.sleep(5)
         return (save_local_path,)
 
 
