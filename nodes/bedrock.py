@@ -26,7 +26,6 @@ class BedrockNovaMultimodal:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "image": ("IMAGE",),
                 "prompt": ("STRING", {"multiline": True}),
                 "model_id": (
                     [
@@ -66,6 +65,9 @@ class BedrockNovaMultimodal:
                         "display": "slider",
                     },
                 )
+            },
+            "optional": {
+                "image": ("IMAGE",),
             }
         }
 
@@ -574,5 +576,5 @@ NODE_CLASS_MAPPINGS = {
     "Bedrock - Claude": BedrockClaude,
     "Bedrock - Claude Multimodal": BedrockClaudeMultimodal,
     "Bedrock - SDXL": BedrockSDXL,
-    "Bedrock = Nova": BedrockNovaMultimodal
+    "Bedrock - Nova": BedrockNovaMultimodal
 }
