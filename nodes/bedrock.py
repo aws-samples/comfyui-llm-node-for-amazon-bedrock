@@ -67,7 +67,7 @@ class BedrockNovaMultimodal:
                 )
             },
             "optional": {
-                "image": ("IMAGE",),
+                "image": ("IMAGE",{"default": None}),
             }
         }
 
@@ -78,62 +78,58 @@ class BedrockNovaMultimodal:
     @retry(tries=MAX_RETRY)
     def forward(
         self,
-        image,
-        prompt,
-        model_id,
-        maxTokens,
-        temperature,
-        topP,
+        **kwargs
     ):
-        """
-        Invokes the Anthropic Claude model to run an inference using the input
-        provided in the request body.
+        
+        prompt = kwargs.get('prompt')
+        model_id = kwargs.get('model_id')
+        maxTokens = kwargs.get('maxTokens')
+        temperature = kwargs.get('temperature')
+        topP = kwargs.get('topP')
+        image = kwargs.get('image')
+        
+        content = []
+        content.append({
+                            "text": prompt,
+                        })
 
-        :param prompt: The prompt that you want Claude to complete.
-        :return: Inference response from the model.
-        """
+        if image is not None:
+            image = image[0] * 255.0
+            image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
+    
+            width, height = image.size
+            max_size = max(width, height)
+            if max_size > CLAUDE3_MAX_SIZE:
+                width = round(width * CLAUDE3_MAX_SIZE / max_size)
+                height = round(height * CLAUDE3_MAX_SIZE / max_size)
+                image = image.resize((width, height))
+    
+            buffer = BytesIO()
+            image.save(buffer, format="png", quality=80)
+            image_data = buffer.getvalue()
+    
+            image_base64 = base64.b64encode(image_data).decode("utf-8")
+            content.append( {
+                "image": {
+                    "format": "png",
+                    "source": {"bytes": image_base64},
+                }
+              }
+            )
+            
+        inf_params = {"max_new_tokens": maxTokens, "top_p": topP, "temperature": temperature}
 
-        image = image[0] * 255.0
-        image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
-
-        width, height = image.size
-        max_size = max(width, height)
-        if max_size > CLAUDE3_MAX_SIZE:
-            width = round(width * CLAUDE3_MAX_SIZE / max_size)
-            height = round(height * CLAUDE3_MAX_SIZE / max_size)
-            image = image.resize((width, height))
-
-        buffer = BytesIO()
-        image.save(buffer, format="webp", quality=80)
-        image_data = buffer.getvalue()
-
-        image_base64 = base64.b64encode(image_data).decode("utf-8")
 
         body = json.dumps(
             {
-                "anthropic_version": "bedrock-2023-05-31",
-                "maxTokens": max_tokens,
+                "schemaVersion": "messages-v1",
                 "messages": [
                     {
                         "role": "user",
-                        "content": [
-                            {
-                                "type": "image",
-                                "source": {
-                                    "type": "base64",
-                                    "media_type": "image/webp",
-                                    "data": image_base64,
-                                },
-                            },
-                            {
-                                "type": "text",
-                                "text": prompt,
-                            },
-                        ],
+                        "content": content,
                     }
                 ],
-                "temperature": temperature,
-                "topP": top_p,
+                "inferenceConfig": inf_params,
             },
             ensure_ascii=False,
         )
@@ -142,8 +138,9 @@ class BedrockNovaMultimodal:
             body=body,
             modelId=model_id,
         )
-        message = json.loads(response.get("body").read())["content"][0]["text"]
 
+        message = json.loads(response.get("body").read())['output']['message']['content'][0]['text']
+        print("here1===",message)
         return (message,)
 
 class BedrockClaudeMultimodal:

@@ -149,7 +149,13 @@ class BedrockNovaVideo:
     CATEGORY = "aws"
 
     @retry(tries=MAX_RETRY)
-    def forward(self, prompt, dimension,seed,image):
+    def forward(self, **kwargs):
+        prompt = kwargs.get('prompt')
+        dimension = kwargs.get('dimension')
+        seed = kwargs.get('seed')
+        image = kwargs.get('image')
+
+        
         input_image_base64=None
         if image is not None:
             image = image[0] * 255.0
@@ -160,19 +166,19 @@ class BedrockNovaVideo:
             image_data = buffer.getvalue()
             input_image_base64 = base64.b64encode(image_data).decode("utf-8")
 
+        textToVideoParams={ "text": prompt}
+        if input_image_base64 is not None:
+            textToVideoParams["images"] = [
+                {
+                    "format": "png",  # May be "png" or "jpeg"
+                    "source": {
+                        "bytes": input_image_base64
+                    }
+                }
+            ]
         model_input = {
             "taskType": "TEXT_VIDEO",
-            "textToVideoParams": {
-                "text": prompt,
-                "images": [
-                    {
-                        "format": "png",  # May be "png" or "jpeg"
-                        "source": {
-                            "bytes": input_image_base64
-                        }
-                    }
-                ]
-                },
+            "textToVideoParams": textToVideoParams,
             "videoGenerationConfig": {
                 "durationSeconds": 6,  # 6 is the only supported value currently.
                 "fps": 24,  # 24 is the only supported value currently.
