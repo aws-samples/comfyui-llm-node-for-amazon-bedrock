@@ -83,8 +83,7 @@ class BedrockNovaMultimodal:
         model_id,
         maxTokens,
         temperature,
-        top_p,
-        top_k,
+        topP,
     ):
         """
         Invokes the Anthropic Claude model to run an inference using the input
