@@ -81,7 +81,7 @@ class BedrockNovaMultimodal:
         image,
         prompt,
         model_id,
-        max_tokens,
+        maxTokens,
         temperature,
         top_p,
         top_k,
