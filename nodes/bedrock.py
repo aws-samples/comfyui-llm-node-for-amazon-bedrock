@@ -574,4 +574,5 @@ NODE_CLASS_MAPPINGS = {
     "Bedrock - Claude": BedrockClaude,
     "Bedrock - Claude Multimodal": BedrockClaudeMultimodal,
     "Bedrock - SDXL": BedrockSDXL,
+    "Bedrock = Nova": BedrockNovaMultimodal
 }
