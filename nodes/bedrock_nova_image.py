@@ -201,13 +201,13 @@ class BedrockNovaTextImage:
         output_directory = f"output/{generation_id}"
 
         # Generate the image(s).
-        response = generate_images(
+        response_body = generate_images(
             inference_params=inference_params,
             model_id="amazon.nova-canvas-v1:0",
             output_directory=output_directory
         )
 
-        response_body = json.loads(response["body"].read())
+        # response_body = json.loads(response["body"].read())
         # base64_image_data = response_body["images"][0]
         images = [
             np.array(Image.open(BytesIO(base64.b64decode(base64_image))))
