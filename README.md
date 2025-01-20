@@ -149,7 +149,13 @@ Here are models ready for use, more models are coming soon.
     - [X] inpainting
     - [X] outpainting
     - [X] image variation
-
+  - Nova Canvas
+    - [X] text to image
+    - [ ] inpainting
+    - [ ] outpainting
+    - [ ] image variation
+    - [ ] image conditioning
+    - [ ] background removal
 - Stability AI:
 
   - Stable Diffusion XL (1.0)
