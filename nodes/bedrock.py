@@ -20,6 +20,129 @@ CLAUDE3_MAX_SIZE = 1568
 bedrock_runtime_client = get_client(service_name="bedrock-runtime")
 
 
+
+class BedrockNovaMultimodal:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "prompt": ("STRING", {"multiline": True}),
+                "model_id": (
+                    [
+                        "amazon.nova-pro-v1:0",
+                        "amazon.nova-lite-v1:0",
+                    ],
+                ),
+                "maxTokens": (
+                    "INT",
+                    {
+                        "default": 2048,
+                        "min": 0,  # Minimum value
+                        "max": 4096,  # Maximum value
+                        "step": 1,  # Slider's step
+                        "display": "number",  # Cosmetic only: display as "number" or "slider"
+                    },
+                ),
+                "temperature": (
+                    "FLOAT",
+                    {
+                        "default": 0.5,
+                        "min": 0.0,
+                        "max": 1.0,
+                        "step": 0.1,
+                        "round": 0.001,  # The value represeting the precision to round to, will be set to the step value by default. Can be set to False to disable rounding.
+                        "display": "slider",
+                    },
+                ),
+                "topP": (
+                    "FLOAT",
+                    {
+                        "default": 1.0,
+                        "min": 0.0,
+                        "max": 1.0,
+                        "step": 0.1,
+                        "round": 0.001,  # The value represeting the precision to round to, will be set to the step value by default. Can be set to False to disable rounding.
+                        "display": "slider",
+                    },
+                )
+            },
+            "optional": {
+                "image": ("IMAGE",{"default": None}),
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    FUNCTION = "forward"
+    CATEGORY = "aws"
+
+    @retry(tries=MAX_RETRY)
+    def forward(
+        self,
+        **kwargs
+    ):
+        
+        prompt = kwargs.get('prompt')
+        model_id = kwargs.get('model_id')
+        maxTokens = kwargs.get('maxTokens')
+        temperature = kwargs.get('temperature')
+        topP = kwargs.get('topP')
+        image = kwargs.get('image')
+        
+        content = []
+        content.append({
+                            "text": prompt,
+                        })
+
+        if image is not None:
+            image = image[0] * 255.0
+            image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
+    
+            width, height = image.size
+            max_size = max(width, height)
+            if max_size > CLAUDE3_MAX_SIZE:
+                width = round(width * CLAUDE3_MAX_SIZE / max_size)
+                height = round(height * CLAUDE3_MAX_SIZE / max_size)
+                image = image.resize((width, height))
+    
+            buffer = BytesIO()
+            image.save(buffer, format="png", quality=80)
+            image_data = buffer.getvalue()
+    
+            image_base64 = base64.b64encode(image_data).decode("utf-8")
+            content.append( {
+                "image": {
+                    "format": "png",
+                    "source": {"bytes": image_base64},
+                }
+              }
+            )
+            
+        inf_params = {"max_new_tokens": maxTokens, "top_p": topP, "temperature": temperature}
+
+
+        body = json.dumps(
+            {
+                "schemaVersion": "messages-v1",
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": content,
+                    }
+                ],
+                "inferenceConfig": inf_params,
+            },
+            ensure_ascii=False,
+        )
+
+        response = bedrock_runtime_client.invoke_model(
+            body=body,
+            modelId=model_id,
+        )
+
+        message = json.loads(response.get("body").read())['output']['message']['content'][0]['text']
+        print("here1===",message)
+        return (message,)
+
 class BedrockClaudeMultimodal:
     @classmethod
     def INPUT_TYPES(s):
@@ -252,7 +375,7 @@ class BedrockClaude:
         # The different model providers have individual request and response formats.
         # For the format, ranges, and default values for Anthropic Claude, refer to:
         # https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html
-
+        print("prompt input:",prompt)
         body = json.dumps(
             {
                 "anthropic_version": "bedrock-2023-05-31",
@@ -280,6 +403,7 @@ class BedrockClaude:
             modelId=model_id,
         )
         message = json.loads(response.get("body").read())["content"][0]["text"]
+        print("output message:",message)
 
         return (message,)
 
@@ -450,4 +574,5 @@ NODE_CLASS_MAPPINGS = {
     "Bedrock - Claude": BedrockClaude,
     "Bedrock - Claude Multimodal": BedrockClaudeMultimodal,
     "Bedrock - SDXL": BedrockSDXL,
+    "Bedrock - Nova": BedrockNovaMultimodal
 }

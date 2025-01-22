@@ -18,6 +18,7 @@ class PromptTemplate:
 
     def forward(self, prompt, prompt_template):
         output = prompt_template.replace("{prompt}", prompt).replace("[prompt]", prompt)
+        #print("output prompt:",output)
         return (output,)
 
 class PromptTemplateTwoInput:

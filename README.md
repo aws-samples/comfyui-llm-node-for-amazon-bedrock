@@ -143,6 +143,14 @@ Here are models ready for use, more models are coming soon.
   - [X] Claude Instant (1.x)
 
 - Amazon:
+  - Nova Canvas
+    - [X] text to image
+    - [X] variation
+    - [X] background replacement(with prompt)
+  
+  - Nova Reel
+    - [X] text to video
+    - [X] image to video
 
   - Titan Image Generator G1 (1.x)
     - [X] text to image
