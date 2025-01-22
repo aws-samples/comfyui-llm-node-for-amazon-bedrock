@@ -48,20 +48,20 @@ class ImageOCRByTextract:
         # 获取图像原始尺寸
         img_width, img_height = image.size
 
-        # 调用Textract DetectDocumentText函数
+        ## Call Textract DetectDocumentText function
         byte_stream = io.BytesIO()
         image.save(byte_stream, format='PNG')
         byte_image = byte_stream.getvalue()
         response = textract.detect_document_text(Document={'Bytes': byte_image})
 
-        # 初始化结果列表
+        #initial the scan result
         result = []
-        # 创建一个与原始图像大小相同的黑色遮罩图像
+        # Create a black mask image of the same size as the original image
         mask = np.zeros_like(numpy_image)
         all_text=""
 
 
-        # 提取文本和边界框信息
+        # Extract text and bounding box information
         for item in response['Blocks']:
             if item['BlockType'] == 'LINE':
                 text = item['Text']
@@ -71,7 +71,7 @@ class ImageOCRByTextract:
                 width = int(box['Width'] * img_width)
                 height = int(box['Height']* img_height)
 
-                # 将信息添加到结果列表中
+                ##Add information to the result list
                 result.append({
                     'Text': text,
                     'Left': left,
@@ -81,16 +81,16 @@ class ImageOCRByTextract:
 
                 })
                 all_text=all_text+text
-                # 对每个文本信息框绘制mask遮罩
-                # 指定矩形框的左上角和右下角坐标
+                #Draw mask for each text information box
+                #Specify the coordinates of the top-left and bottom-right corners of the rectangle
                 temp_mask = np.zeros_like(numpy_image)
                 x1, y1 = int(left), int(top)
                 x2, y2 = int(left + width), int(top + height)
-                # 在遮罩图像上绘制白色矩形框
+                # Draw white rectangular boxes on the mask image
                 cv2.rectangle(temp_mask, (x1, y1), (x2, y2), (255, 255, 255), -1)
                 mask = cv2.bitwise_or(mask, temp_mask)
 
-        # 将遮罩图像和原始图像进行位运算,生成遮罩后的图像
+        # Perform bitwise operation between the mask image and the original image to generate the masked image
         masked_img = cv2.bitwise_and(numpy_image, mask)
         masked_img = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(0)
 
@@ -130,32 +130,32 @@ class ImageOCRByTextractV2:
         ## 转换ori_image为tensor张量
         pil_image = Image.open(ori_image_path)
         transform = transforms.Compose([
-            transforms.ToTensor(),  # 将 PIL Image 转换为 tensor，并将像素值归一化到 [0, 1]
+            transforms.ToTensor(),  # Convert PIL Image to tensor and normalize pixel values to [0, 1]
         ])
         image_input = transform(pil_image)
 
-        ## image input已经是标准comfyui的image张量格式
+        ## The image input is already in the standard ComfyUI image tensor format
         numpy_image = (image_input[0] * 255.0).clamp(0, 255).numpy()
         image = image_input[0] * 255.0
         image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
-        # 获取图像原始尺寸
+        # Get the original dimensions of the image
         img_width, img_height = image.size
 
-        # 调用Textract DetectDocumentText函数
+        # Call the Textract DetectDocumentText function
         byte_stream = io.BytesIO()
         image.save(byte_stream, format='PNG')
         byte_image = byte_stream.getvalue()
         response = textract.detect_document_text(Document={'Bytes': byte_image})
 
-        # 初始化结果列表
+        # Initialize the results list
         result = []
-        # 创建一个与原始图像大小相同的黑色遮罩图像
+        # Create a black mask image with the same size as the original image
         #mask = np.zeros_like(numpy_image)
         mask = np.ones_like(numpy_image) * 255
         all_text=""
 
 
-        # 提取文本和边界框信息
+        # Extract text and bounding box information
         for item in response['Blocks']:
             if item['BlockType'] == 'LINE':
                 text = item['Text']
@@ -165,28 +165,28 @@ class ImageOCRByTextractV2:
                 width = int(box['Width'] * img_width)
                 height = int(box['Height']* img_height)
 
-                # 将信息添加到结果列表中
+                # Add the information to the result list
                 result.append(text)
-                # 对每个文本信息框绘制mask遮罩
-                # 指定矩形框的左上角和右下角坐标
+                # Draw mask for each text information box
+                # Specify the coordinates of the top-left and bottom-right corners of the rectangle
                 temp_mask = np.zeros_like(numpy_image)
                 x1, y1 = int(left), int(top)
                 x2, y2 = int(left + width), int(top + height)
-                # 在遮罩图像上绘制黑色矩形框
+                # Draw black rectangular boxes on the mask image
                 #cv2.rectangle(temp_mask, (x1, y1), (x2, y2), (0, 0, 0), -1)
                 #mask = cv2.bitwise_or(mask, temp_mask)
 
                 cv2.rectangle(mask, (left, top), (left + width, top + height), (0, 0, 0), -1)
 
-        # 将遮罩图像和原始图像进行位运算,生成遮罩后的图像
+        # Perform bitwise operation between the mask image and the original image to generate the masked image
         masked_img = np.where(mask == 0, 0, numpy_image)
         #masked_img = cv2.bitwise_and(numpy_image, mask)
         masked_img = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(0)
         #masked_img.save(temp_img_path)
-        # 将 PyTorch 张量转换为 PIL 图像
+        # Convert PyTorch tensor to PIL image
         to_pil = transforms.ToPILImage()
         pil_image = to_pil(masked_img.squeeze(0))
-        # 保存 PIL 图像
+        # save PIL image
         pil_image.save(temp_img_path)
 
         all_text="|".join(result)
@@ -220,15 +220,15 @@ class ImageOCRByTextractV4:
     OUTPUT_NODE = True
 
     def convert_to_xywh(self,coordinates):
-        # 提取所有的 x 和 y 坐标
+        # Extract all x and y coordinates
         x_coords = [coord[0] for coord in coordinates]
         y_coords = [coord[1] for coord in coordinates]
 
-        # 计算 x offset 和 y offset
+        # Calculate x offset and y offset
         x_offset = min(x_coords)
         y_offset = min(y_coords)
 
-        # 计算 width 和 height
+        # Calculate width and height
         width = max(x_coords) - x_offset
         height = max(y_coords) - y_offset
 
@@ -237,20 +237,18 @@ class ImageOCRByTextractV4:
 
     def ocr_by_paddleocr(self,image_input):
 
-        ## image input已经是标准comfyui的image张量格式
         image = image_input[0] * 255.0
         image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
         numpy_image = (image_input[0] * 255.0).clamp(0, 255).numpy()
 
-        # 获取图像原始尺寸
         img_width, img_height = image.size
 
 
-        # 创建临时文件
+        # Create temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix='.png', dir='/tmp/') as temp_file:
             temp_filename = temp_file.name
 
-        # 保存numpy_image为临时文件
+        # Save numpy_image as a temporary file
         cv2.imwrite(temp_filename, cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR))
 
         ocr = PaddleOCR(
@@ -263,7 +261,7 @@ class ImageOCRByTextractV4:
 
         ocr_results = ocr.ocr(temp_filename, cls=True)[0]
 
-        # 创建一个与原始图像大小相同的遮罩图像
+        # Create a mask image with the same size as the original image
         result = []
         masked_img = numpy_image.copy()
         all_text=""
@@ -273,7 +271,7 @@ class ImageOCRByTextractV4:
         heights=[]
 
 
-        # 提取文本和边界框信息
+        # Extract text and bounding box information
         for line in ocr_results:
              if not isinstance(line, list):
                 continue
@@ -289,15 +287,15 @@ class ImageOCRByTextractV4:
              print(text)
              result.append(text)
 
-             # 对每个文本信息框绘制mask遮罩
-             # 指定矩形框的左上角和右下角坐标
+             # Draw mask for each text information box
+             # Specify the coordinates of the top-left and bottom-right corners of the rectangle
              x1, y1 = int(x_offset), int(y_offset)
              x2, y2 = int(x_offset + width), int(y_offset + height)
-             # 在遮罩图像上绘制黑色矩形框
+             # Draw a black rectangle on the mask image
              cv2.rectangle(masked_img, (x1, y1), (x2, y2), (0, 0, 0), -1)
 
         masked_img = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(0)
-        ###汇总结果输出
+
         all_text="|".join(result)
         x_offsets="|".join(x_offsets)
         y_offsets="|".join(y_offsets)
@@ -306,9 +304,9 @@ class ImageOCRByTextractV4:
 
         print("result",result)
 
-        # 添加原始图像输出
+        # Add original image output
         original_img = image_input
-        # 删除临时文件
+        # delete temp files
         os.unlink(temp_filename)
 
         return all_text ,x_offsets,y_offsets,widths,heights,img_width,img_height, masked_img,original_img
@@ -340,23 +338,23 @@ class ImageOCRByTextractV3:
 
     def ocr_by_textract(self,image_input):
 
-        ## image input已经是标准comfyui的image张量格式
+
         image = image_input[0] * 255.0
         image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
         numpy_image = (image_input[0] * 255.0).clamp(0, 255).numpy()
 
-        # 获取图像原始尺寸
+
         img_width, img_height = image.size
 
-        # 调用Textract DetectDocumentText函数
+
         byte_stream = io.BytesIO()
         image.save(byte_stream, format='PNG')
         byte_image = byte_stream.getvalue()
         response = textract.detect_document_text(Document={'Bytes': byte_image})
 
-        # 初始化结果列表
+
         result = []
-        # 创建一个与原始图像大小相同的遮罩图像
+
         masked_img = numpy_image.copy()
         all_text=""
         x_offsets=[]
@@ -366,7 +364,6 @@ class ImageOCRByTextractV3:
 
 
 
-        # 提取文本和边界框信息
         for item in response['Blocks']:
             if item['BlockType'] == 'LINE':
                 text = item['Text']
@@ -384,19 +381,19 @@ class ImageOCRByTextractV3:
                 height = int(box['Height']* img_height)
                 heights.append(str(height))
 
-                # 将信息添加到结果列表中
+
                 result.append(text)
-                # 对每个文本信息框绘制mask遮罩
-                # 指定矩形框的左上角和右下角坐标
+                # Draw mask for each text information box
+                # Specify the coordinates of the top-left and bottom-right corners of the rectangle
                 x1, y1 = int(left), int(top)
                 x2, y2 = int(left + width), int(top + height)
-                # 在遮罩图像上绘制黑色矩形框
+                # Draw black rectangular boxes on the mask image
                 cv2.rectangle(masked_img, (x1, y1), (x2, y2), (0, 0, 0), -1)
 
 
         #masked_img = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(0)
         masked_img = torch.from_numpy(np.array(masked_img).astype(np.float32) / 255.0).unsqueeze(0)
-        ###汇总结果输出
+        ###summary the output
         all_text="|".join(result)
         x_offsets="|".join(x_offsets)
         y_offsets="|".join(y_offsets)
@@ -405,7 +402,7 @@ class ImageOCRByTextractV3:
 
         print("result",result)
 
-        # 添加原始图像输出
+        # Add original image output
         original_img = image_input
 
         return all_text ,x_offsets,y_offsets,widths,heights,img_width,img_height, masked_img,original_img

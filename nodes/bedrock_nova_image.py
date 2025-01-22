@@ -169,7 +169,7 @@ class BedrockNovaTextImage:
                 ),
             },
             "optional": {
-                "negative_prompt":(("STRING", {"multiline": True}),)
+                "negative_prompt":("STRING", {"multiline": True}),
             }
         }
 
