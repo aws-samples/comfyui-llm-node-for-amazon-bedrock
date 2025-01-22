@@ -127,7 +127,7 @@ class ImageOCRByTextractV2:
         ori_image_path = folder_paths.get_annotated_filepath(image_input)
         pos_img_path = os.path.join(temp_img_path)
 
-        ## 转换ori_image为tensor张量
+        ## Convert orignal image to tensor
         pil_image = Image.open(ori_image_path)
         transform = transforms.Compose([
             transforms.ToTensor(),  # Convert PIL Image to tensor and normalize pixel values to [0, 1]
