@@ -45,7 +45,7 @@ class ImageOCRByTextract:
         numpy_image = (image_input[0] * 255.0).clamp(0, 255).numpy()
         image = image_input[0] * 255.0
         image = Image.fromarray(image.clamp(0, 255).numpy().round().astype(np.uint8))
-        # 获取图像原始尺寸
+        # Get the original dimensions of the image
         img_width, img_height = image.size
 
         ## Call Textract DetectDocumentText function
