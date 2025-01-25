@@ -264,9 +264,9 @@ class BedrockRay2Video:
  
 
         model_input = {
-             "prompt":text_prompt,
+             "prompt":prompt,
              "aspect_ratio": aspect_ratio,
-             "loop": false,
+             "loop": False,
              "duration": duration,
              "resolution": resolution
             }

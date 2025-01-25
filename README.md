@@ -102,12 +102,18 @@ You can use Claude 3 multimodal to caption image:
 
 Here are models ready for use, more models are coming soon.
 
-- Anthropic:
+- Luma:
+  - [X] Ray2
 
+- Anthropic:
   - [X] Claude (1.x, 2.0, 2.1, haiku, sonnet, opus)
   - [X] Claude Instant (1.x)
 
 - Amazon:
+  - Nova LLM
+    - [X] Nova Lite
+    - [X] Nova Pro
+  
   - Nova Canvas
     - [X] text to image
     - [X] variation
