@@ -259,10 +259,11 @@ class BedrockRay2Video:
     def forward(self, **kwargs):
         prompt = kwargs.get('prompt')
         aspect_ratio = kwargs.get("aspect_ratio")
-        duration = kwargs.get('dimension')
+        duration = kwargs.get('duration')
         resolution = kwargs.get('resolution')
  
 
+        print("ray2 prompt==",prompt)
         model_input = {
              "prompt":prompt,
              "aspect_ratio": aspect_ratio,
