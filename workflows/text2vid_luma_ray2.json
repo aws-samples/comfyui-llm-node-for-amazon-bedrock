@@ -1,0 +1,326 @@
+{
+  "last_node_id": 14,
+  "last_link_id": 15,
+  "nodes": [
+    {
+      "id": 9,
+      "type": "PreviewImage",
+      "pos": [
+        1080,
+        600
+      ],
+      "size": [
+        340,
+        246
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 8
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 7,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1080,
+        140
+      ],
+      "size": [
+        340,
+        100
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 14,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            12
+          ],
+          "slot_index": 0,
+          "shape": 6
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "",
+        "/home/user/opt/ComfyUI/output/2025-02-16_14-32-30_0ch3x0afqras/0ch3x0afqras.mp4"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        1460,
+        140
+      ],
+      "size": [
+        680,
+        695.25
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 11
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": null
+        }
+      ],
+      "title": "Video Combine - VHS",
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine"
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "luma_",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 20,
+        "save_metadata": true,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "luma__00003.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 24
+          },
+          "muted": false
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": "VHS_LoadVideoPath",
+      "pos": [
+        1080,
+        300
+      ],
+      "size": [
+        340,
+        238
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "video",
+          "type": "STRING",
+          "link": 12,
+          "widget": {
+            "name": "video"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            8,
+            11
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "frame_count",
+          "type": "INT",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": null
+        },
+        {
+          "name": "video_info",
+          "type": "VHS_VIDEOINFO",
+          "links": null
+        }
+      ],
+      "title": "Load Video (Path) - VHS",
+      "properties": {
+        "Node name for S&R": "VHS_LoadVideoPath"
+      },
+      "widgets_values": {
+        "video": "",
+        "force_rate": 0,
+        "force_size": "Disabled",
+        "custom_width": 512,
+        "custom_height": 512,
+        "frame_load_cap": 0,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "videopreview": {
+          "hidden": false,
+          "paused": true,
+          "params": {
+            "force_rate": 0,
+            "frame_load_cap": 0,
+            "skip_first_frames": 0,
+            "select_every_nth": 1,
+            "filename": "",
+            "type": "path",
+            "format": "video/"
+          },
+          "muted": false
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "Bedrock - Luma AI Ray Video",
+      "pos": [
+        640,
+        140
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            14
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Bedrock - Luma AI Ray Video"
+      },
+      "widgets_values": [
+        "A high-contrast, mature anime sequence of Yuji Itadori, explicitly styled like Ghost in the Shell 1995 anime. His pink hair and strong physique rendered in that iconic 90s anime cel-shading technique with sharp shadows and detailed muscle definition. @style classic 90s anime, Ghost in the Shell aesthetic with muted colors and dramatic shadow planes. His cursed energy appears as ethereal, digital glitches similar to the Major's thermoptic camouflage effects. The scene shows him in a brutalist concrete environment with deep puddles reflecting neon signs, heavy industrial atmosphere with steam vents and power lines crossing overhead. His Jujutsu Tech uniform reimagined with tactical urban gear and utility pouches like Section 9 operatives wear. Heavy film grain overlay and those signature deep shadow pools of 90s anime create a gritty, serious atmosphere while his determined eyes reflect the neon glow from above",
+        "16:9",
+        "720p",
+        "9s",
+        "comfyui-workflow-outputs",
+        "False"
+      ]
+    }
+  ],
+  "links": [
+    [
+      8,
+      8,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      11,
+      8,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      7,
+      0,
+      8,
+      2,
+      "STRING"
+    ],
+    [
+      14,
+      5,
+      0,
+      7,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": {
+        "0": -590.8984375,
+        "1": -48.78125
+      }
+    },
+    "ue_links": []
+  },
+  "version": 0.4
+}

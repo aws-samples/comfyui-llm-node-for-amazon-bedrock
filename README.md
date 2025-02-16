@@ -1,6 +1,5 @@
 # Amazon Bedrock nodes for ComfyUI
 
-__*News:*__ Bedrock nodes now support __*Claude3 haiku sonnet*__, also support multimodal for image caption
 
 [***Amazon Bedrock***](https://aws.amazon.com/bedrock/) is a fully managed service that offers a choice of high-performing foundation models (FMs) from leading AI companies.
 This repo is the ComfyUI nodes for Bedrock service. You can invoke foundation models in your ComfyUI pipeline.
@@ -31,7 +30,9 @@ git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git
 
 2. You need to make sure your access to Bedrock models are granted. Go to aws console [*https://console.aws.amazon.com/bedrock/home#/modelaccess*](https://console.aws.amazon.com/bedrock/home#/modelaccess) . Make sure these models in the figure are checked.
 
-![](./assets/model_access.webp)
+![](./assets/base_models_us-east-1.png)
+![](./assets/base_models_us-east-2.png)
+
 
 3. You need configure credential for your environments with IAM Role or AKSK.
 
@@ -132,6 +133,44 @@ Download [this workflow file](workflows/variation_with_caption.json) and load in
 This workflow begins by using Bedrock Claude3 to refine the image editing prompt, generation caption of the original image, and merge the two image description into one. It then utilizes Bedrock Titan Image's variation feature to generate similar images based on the refined prompt.
 
 ![](./assets/example_variation_with_caption.webp)
+
+### Text to Video with Amazon Nova Reel
+Generate engaging videos using Amazon's Nova Reel model, supporting both text-to-video and image-to-video generation.
+
+Text-to-Video Workflow: Download [this workflow file](workflows/text2vid_nova_reel.json) or the png below and load in ComfyUI  
+Image-to-Video Workflow: Download [this workflow file](workflows/img2vid_nova_reel.json) or the png below and load in ComfyUI
+
+This workflows showcases Amazon Nova Reel's capabilities to transform text descriptions or images into dynamic video content.
+
+![](./assets/text2vid_nova_reel.png)
+![](./assets/img2vid_nova_reel.png)
+
+The workflow combines:
+- Nova Reel's text-to-video and image-to-video generation
+- Use dimension 1280x720
+- Controls for seed and have the option to control_after_generate
+- Support for S3 bucket destination configuration
+
+Example output:  
+https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock/tree/main/assets/text2vid_nova_reel_output_example.mp4  
+https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock/tree/main/assets/img2vid_nova_reel_output_example.mp4  
+
+
+### Text to Video with Luma Ray
+Generate high-quality videos from text descriptions using Luma AI's Ray model.
+
+Download [this workflow file](workflows/text2vid_luma_ray2.json) or the png below and load in ComfyUI
+
+This workflow demonstrates how to use Luma AI's Ray model through Bedrock to create dynamic videos from text prompts.
+
+![](./assets/text2vid_luma_ray.png)
+
+The workflow combines:
+- Luma Ray's advanced text-to-video capabilities
+- Options to control aspect-ratio, resolution, video duration, destination_bucket, and loop option
+
+Example output:  
+https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock/tree/main/assets/text2vid_luma_output_example.mp4
 
 ## Support models:
 

@@ -1,30 +1,29 @@
 import json
 import os
-import re
 import base64
 from io import BytesIO
 from random import randint
-import logging
 from datetime import datetime
-import requests
 from retry import retry
 from PIL import Image
 import numpy as np
-import torch
 from .session import get_client
 import time
 import boto3
 
 MAX_RETRY = 3
 def get_default_region():
-    """获取默认的 AWS 区域"""
     session = boto3.Session()
     return session.region_name
 
 def get_account_id():
-    """获取当前 AWS 账户 ID"""
     sts_client = boto3.client('sts')
     return sts_client.get_caller_identity().get('Account')
+
+s3_client = boto3.client("s3", region_name=get_default_region())
+bedrock_runtime_client = get_client(service_name="bedrock-runtime")
+region = get_default_region()
+account_id = get_account_id()
 
 def is_video_downloaded_for_invocation_job(invocation_job, output_folder="output"):
     """
@@ -110,12 +109,6 @@ def save_completed_job(job, output_folder="output"):
     )
     return localPath
 
-
-bedrock_runtime_client = get_client(service_name="bedrock-runtime")
-region = get_default_region()
-account_id = get_account_id()
-s3_destination_bucket = f"sagemaker-{region}-{account_id}"
-
 class BedrockNovaVideo:
     @classmethod
     def INPUT_TYPES(s):
@@ -138,6 +131,9 @@ class BedrockNovaVideo:
                         "display": "number",
                     },
                 ),
+                "destination_bucket": (
+                    [b["Name"] for b in s3_client.list_buckets()["Buckets"]],
+                ),
             },
             "optional": {
                 "image": ("IMAGE",),
@@ -154,6 +150,7 @@ class BedrockNovaVideo:
         dimension = kwargs.get('dimension')
         seed = kwargs.get('seed')
         image = kwargs.get('image')
+        s3_destination_bucket = kwargs.get("destination_bucket")
 
         
         input_image_base64=None
@@ -207,91 +204,8 @@ class BedrockNovaVideo:
             start_time = time.time()
 
             if status == "Completed":
-                save_local_path = save_completed_job(job_update, output_folder="/home/ubuntu/ComfyUI/output/")
-                break
-            else:
-                elapsed_time = time.time() - start_time
-                if elapsed_time > 600:
-                    print("Job timed out after 60 seconds.")
-                    break
-                else:
-                    time.sleep(5)
-        return (save_local_path,)
-
-
-class BedrockRay2Video:
-    @classmethod
-    def INPUT_TYPES(s):
-        return {
-            "required": {
-                "prompt": ("STRING", {"multiline": True}),
-                "aspect_ratio": (
-                    [
-                        "16:9",
-                        "9:16",
-                        "5:4",
-                        "4:5",
-                        "3:2",
-                        "2:3"
-
-                    ],
-                ),
-                "duration": (
-                    [
-                        "9s",
-                        "5s"
-                    ],
-                ),
-                "resolution":(
-                    [
-                        "720p",
-                        "540p"
-                    ],
-                )
-            }
-        }
-
-    RETURN_TYPES = ("STRING",)
-    FUNCTION = "forward"
-    CATEGORY = "aws"
-
-    @retry(tries=MAX_RETRY)
-    def forward(self, **kwargs):
-        prompt = kwargs.get('prompt')
-        aspect_ratio = kwargs.get("aspect_ratio")
-        duration = kwargs.get('duration')
-        resolution = kwargs.get('resolution')
- 
-
-        print("ray2 prompt==",prompt)
-        model_input = {
-             "prompt":prompt,
-             "aspect_ratio": aspect_ratio,
-             "loop": False,
-             "duration": duration,
-             "resolution": resolution
-            }
-        
-        invocation = bedrock_runtime_client.start_async_invoke(
-        modelId="luma.ray-v2:0",
-        modelInput=model_input,
-        outputDataConfig={"s3OutputDataConfig": {"s3Uri": f"s3://{s3_destination_bucket}"}},
-    )
-
-        invocation_arn = invocation["invocationArn"]
-        print("\nResponse:")
-        print(json.dumps(invocation, indent=2, default=str))
-        
-        save_local_path = ""
-    
-        # Save the invocation details for later reference. Helpful for debugging and reporting feedback.
-        while True:
-            job_update = bedrock_runtime_client.get_async_invoke(invocationArn=invocation_arn)
-            status = job_update["status"]
-            start_time = time.time()
-
-            if status == "Completed":
-                save_local_path = save_completed_job(job_update, output_folder="/home/ubuntu/ComfyUI/output/")
+                save_local_path = save_completed_job(job_update, 
+                                                     output_folder=os.path.expanduser("~/ComfyUI/output/"))
                 break
             else:
                 elapsed_time = time.time() - start_time
@@ -304,6 +218,5 @@ class BedrockRay2Video:
 
 
 NODE_CLASS_MAPPINGS = {
-    "Bedrock - Nova Video": BedrockNovaVideo,
-    "Bedrock - Ray2 Video": BedrockRay2Video
+    "Bedrock - Nova Reel Video": BedrockNovaVideo,
 }
