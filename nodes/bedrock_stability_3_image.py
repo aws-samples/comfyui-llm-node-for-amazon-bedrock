@@ -18,7 +18,7 @@ MAX_RETRY = 3
 def generate_images(
     inference_params,
     model_id="stability.sd3-5-large-v1:0",
-    region_name="us-west-2",
+    region_name="us-east-1",
     endpoint_url=None,
     output_directory="~/ComfyUI/output",
 ):
