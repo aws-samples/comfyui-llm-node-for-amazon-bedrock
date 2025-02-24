@@ -215,6 +215,10 @@ Here are models ready for use, more models are coming soon.
     - [X] text to image
     - [ ] image to image
     - [ ] image to image (masking)
+
+  - Stable Diffusion 3.5 Large
+    - [X] text to image
+    - [X] image to image
     
 
 ## Security
