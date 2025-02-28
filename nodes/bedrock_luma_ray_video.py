@@ -9,8 +9,10 @@ import time
 
 MAX_RETRY = 3
 
+
 def get_default_region():
     return "us-west-2"  # Use us-west-2 for Luma AI Ray 2
+
 
 s3_client = boto3.client("s3", region_name=get_default_region())
 
@@ -87,6 +89,7 @@ bedrock_runtime_client = boto3.client(
 region = get_default_region()
 account_id = get_account_id()
 
+
 class BedrockLumaVideo:
     @classmethod
     def INPUT_TYPES(s):
@@ -99,7 +102,8 @@ class BedrockLumaVideo:
                 "resolution": (["540p", "720p"],),
                 "duration": (["5s", "9s"],),
                 "destination_bucket": (
-                    [b["Name"] for b in s3_client.list_buckets()["Buckets"]],),
+                    [b["Name"] for b in s3_client.list_buckets()["Buckets"]],
+                ),
                 "loop_video": (["False", "True"],),
             },
         }
@@ -147,8 +151,8 @@ class BedrockLumaVideo:
 
             if status == "Completed":
                 save_local_path = save_completed_job(
-                    job_update_response, 
-                    output_folder=os.path.expanduser("~/ComfyUI/output/")
+                    job_update_response,
+                    output_folder=os.path.expanduser("~/ComfyUI/output/"),
                 )
                 break
             elif status == "Failed":
@@ -159,5 +163,6 @@ class BedrockLumaVideo:
 
         return (save_local_path,)
 
-
-NODE_CLASS_MAPPINGS = {"Bedrock - Luma AI Ray Video": BedrockLumaVideo}
+NODE_CLASS_MAPPINGS = {
+    "Amazon Bedrock - Luma AI Ray Video": BedrockLumaVideo,
+}

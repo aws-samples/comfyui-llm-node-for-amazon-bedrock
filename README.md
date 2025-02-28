@@ -134,6 +134,18 @@ This workflow begins by using Bedrock Claude3 to refine the image editing prompt
 
 ![](./assets/example_variation_with_caption.webp)
 
+### Nova Canvas Examples
+Generate stunning images using Amazon's Nova Canvas model, supporting following capabilities:
+- text-to-image including color-palette support and reference image for style reference
+- image-to-image for generating variations
+- image-to-image for background replacement
+
+You'll find all nodes in [this workflow file](workflows/amazon_nova_canvas_nodes.json) or download the png below and drag'n'drop it into ComfyUI 
+
+This workflows showcases all available Amazon Nova Canvas Nodes.
+![](./assets/nova_canvas_workflows.png)
+  
+
 ### Text to Video with Amazon Nova Reel
 Generate engaging videos using Amazon's Nova Reel model, supporting both text-to-video and image-to-video generation.
 
@@ -172,7 +184,22 @@ The workflow combines:
 Example output:  
 https://github.com/aws-samples/comfyui-llm-node-for-amazon-bedrock/tree/main/assets/text2vid_luma_output_example.mp4
 
-## Support models:
+### Stability AI Models Nodes
+Generate stunning images using Stability AIs most recent models, supporting following capabilities:
+- text-to-image
+  - SD3 Large
+  - SD3.5 Large
+  - Stable Image Ultra
+  - Stable Image Core
+- image-to-image for generating variations
+  - SD3 & SD3.5 Large
+
+You'll find all nodes in [this workflow file](workflows/amazon_stablity_ai.json) or download the png below and drag'n'drop it into ComfyUI 
+
+This workflows showcases all available Amazon Nova Canvas Nodes.
+![](./assets/stability_ai_workflows.png)  
+
+## Supported models
 
 Here are models ready for use, more models are coming soon.
 
@@ -190,8 +217,11 @@ Here are models ready for use, more models are coming soon.
   
   - Nova Canvas
     - [X] text to image
-    - [X] variation
-    - [X] background replacement(with prompt)
+    - [ ] inpainting
+    - [ ] outpainting
+    - [X] image variation
+    - [ ] image conditioning
+    - [X] background replacement (with prompt)
   
   - Nova Reel
     - [X] text to video
@@ -202,20 +232,23 @@ Here are models ready for use, more models are coming soon.
     - [X] inpainting
     - [X] outpainting
     - [X] image variation
-  - Nova Canvas
-    - [X] text to image
-    - [ ] inpainting
-    - [ ] outpainting
-    - [ ] image variation
-    - [ ] image conditioning
-    - [ ] background removal
-- Stability AI:
 
+  
+- Stability AI:
   - Stable Diffusion XL (1.0)
     - [X] text to image
     - [ ] image to image
     - [ ] image to image (masking)
-    
+  - SD3 Large (1.0)
+    - [X] text to image
+    - [X] image to image
+  - SD3.5 Large (1.0)
+    - [X] text to image
+    - [X] image to image
+  - Stable Diffusion Image Core (v1.1)
+    - [X] text to image
+  - Stable Diffusion Image Ultra (v1.1)
+    - [X] text to image
 
 ## Security
 
