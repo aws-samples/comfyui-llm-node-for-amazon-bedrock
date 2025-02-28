@@ -240,7 +240,7 @@
     },
     {
       "id": 17,
-      "type": "Bedrock - Nova Reel Video",
+      "type": "Amazon Bedrock - Nova Reel Video",
       "pos": [
         640,
         140
@@ -271,7 +271,7 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "Bedrock - Nova Reel Video"
+        "Node name for S&R": "Amazon Bedrock - Nova Reel Video"
       },
       "widgets_values": [
         "A high-contrast, mature anime sequence of Yuji Itadori, explicitly styled like Ghost in the Shell 1995 anime. His pink hair and strong physique rendered in that iconic 90s anime cel-shading technique with sharp shadows and detailed muscle definition. @style classic 90s anime, Ghost in the Shell aesthetic with muted colors and dramatic shadow planes. His cursed energy appears as ethereal, digital glitches similar to the Major's thermoptic camouflage effects.",

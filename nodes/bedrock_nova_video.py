@@ -216,7 +216,6 @@ class BedrockNovaVideo:
                     time.sleep(5)
         return (save_local_path,)
 
-
 NODE_CLASS_MAPPINGS = {
-    "Bedrock - Nova Reel Video": BedrockNovaVideo,
+    "Amazon Bedrock - Nova Reel Video": BedrockNovaVideo,
 }

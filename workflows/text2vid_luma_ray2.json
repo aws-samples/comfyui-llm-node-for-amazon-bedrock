@@ -240,7 +240,7 @@
     },
     {
       "id": 5,
-      "type": "Bedrock - Luma AI Ray Video",
+      "type": "Amazon Bedrock - Luma AI Ray Video",
       "pos": [
         640,
         140
@@ -264,7 +264,7 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "Bedrock - Luma AI Ray Video"
+        "Node name for S&R": "Amazon Bedrock - Luma AI Ray Video"
       },
       "widgets_values": [
         "A high-contrast, mature anime sequence of Yuji Itadori, explicitly styled like Ghost in the Shell 1995 anime. His pink hair and strong physique rendered in that iconic 90s anime cel-shading technique with sharp shadows and detailed muscle definition. @style classic 90s anime, Ghost in the Shell aesthetic with muted colors and dramatic shadow planes. His cursed energy appears as ethereal, digital glitches similar to the Major's thermoptic camouflage effects. The scene shows him in a brutalist concrete environment with deep puddles reflecting neon signs, heavy industrial atmosphere with steam vents and power lines crossing overhead. His Jujutsu Tech uniform reimagined with tactical urban gear and utility pouches like Section 9 operatives wear. Heavy film grain overlay and those signature deep shadow pools of 90s anime create a gritty, serious atmosphere while his determined eyes reflect the neon glow from above",
