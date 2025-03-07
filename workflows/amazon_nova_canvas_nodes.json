@@ -1,0 +1,362 @@
+{
+  "last_node_id": 17,
+  "last_link_id": 23,
+  "nodes": [
+    {
+      "id": 8,
+      "type": "LoadImage",
+      "pos": [
+        -300,
+        0
+      ],
+      "size": [
+        340,
+        340
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            18
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "aws_logo_portrait_2.png",
+        "image"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "Amazon Bedrock - Nova Canvas Generate Image",
+      "pos": [
+        100,
+        0
+      ],
+      "size": [
+        453.5999755859375,
+        344
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 18,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            19
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Amazon Bedrock - Nova Canvas Generate Image"
+      },
+      "widgets_values": [
+        "retro anime vibes, akira",
+        2,
+        "1024 x 1024",
+        7,
+        52793584,
+        "fixed",
+        "",
+        "",
+        "SEGMENTATION",
+        0.7
+      ]
+    },
+    {
+      "id": 17,
+      "type": "LoadImage",
+      "pos": [
+        -300,
+        400
+      ],
+      "size": [
+        340,
+        320
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            22,
+            23
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "bird.jpg",
+        "image"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "PreviewImage",
+      "pos": [
+        600,
+        400
+      ],
+      "size": [
+        580,
+        320
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 20
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 11,
+      "type": "Amazon Bedrock - Nova Canvas Background Prompt Replace",
+      "pos": [
+        100,
+        780
+      ],
+      "size": [
+        460,
+        222
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 22
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            21
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Amazon Bedrock - Nova Canvas Background Prompt Replace"
+      },
+      "widgets_values": [
+        "dystopian landscape",
+        "bird",
+        2,
+        8.837,
+        28,
+        "fixed"
+      ]
+    },
+    {
+      "id": 16,
+      "type": "PreviewImage",
+      "pos": [
+        600,
+        780
+      ],
+      "size": [
+        580,
+        300
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 21
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 2,
+      "type": "PreviewImage",
+      "pos": [
+        600,
+        0
+      ],
+      "size": [
+        580,
+        340
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 19
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 10,
+      "type": "Amazon Bedrock - Nova Canvas Generate Variations",
+      "pos": [
+        100,
+        400
+      ],
+      "size": [
+        460,
+        320
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 23
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            20
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Amazon Bedrock - Nova Canvas Generate Variations"
+      },
+      "widgets_values": [
+        "retro anime vibes, akira",
+        "blurry, bad quality",
+        0.9400000000000001,
+        2,
+        4.988,
+        "1024 x 1024",
+        489754107,
+        "fixed"
+      ]
+    }
+  ],
+  "links": [
+    [
+      18,
+      8,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      19,
+      9,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      20,
+      10,
+      0,
+      15,
+      0,
+      "IMAGE"
+    ],
+    [
+      21,
+      11,
+      0,
+      16,
+      0,
+      "IMAGE"
+    ],
+    [
+      22,
+      17,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      23,
+      17,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8264462809917354,
+      "offset": {
+        "0": 446.286865234375,
+        "1": 53.397308349609375
+      }
+    },
+    "ue_links": []
+  },
+  "version": 0.4
+}

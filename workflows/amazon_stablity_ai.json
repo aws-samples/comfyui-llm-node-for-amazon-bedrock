@@ -1,0 +1,217 @@
+{
+  "last_node_id": 20,
+  "last_link_id": 29,
+  "nodes": [
+    {
+      "id": 2,
+      "type": "PreviewImage",
+      "pos": [
+        600,
+        0
+      ],
+      "size": [
+        580,
+        340
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 25
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 17,
+      "type": "LoadImage",
+      "pos": [
+        -300,
+        400
+      ],
+      "size": [
+        340,
+        320
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            27
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "bird.jpg",
+        "image"
+      ]
+    },
+    {
+      "id": 20,
+      "type": "PreviewImage",
+      "pos": [
+        600,
+        400
+      ],
+      "size": [
+        580,
+        380
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 29
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 19,
+      "type": "Amazon Bedrock - SD3 & SD3.5 Large | Image to Image",
+      "pos": [
+        100,
+        400
+      ],
+      "size": [
+        460,
+        222
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 27
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            29
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Amazon Bedrock - SD3 & SD3.5 Large | Image to Image"
+      },
+      "widgets_values": [
+        "SD3.5_Large",
+        "retro anime, akira bird",
+        3630365967,
+        "fixed",
+        0.85,
+        "bad quality, blurry"
+      ]
+    },
+    {
+      "id": 18,
+      "type": "Amazon Bedrock - Stability AI Models | Text to Image",
+      "pos": [
+        100,
+        0
+      ],
+      "size": [
+        460,
+        222
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            25
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Amazon Bedrock - Stability AI Models | Text to Image"
+      },
+      "widgets_values": [
+        "Stable_Image_Ultra",
+        "retro anime, akira",
+        "1024 x 1024",
+        3700475971,
+        "fixed",
+        "bad quality, blurry"
+      ]
+    }
+  ],
+  "links": [
+    [
+      25,
+      18,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      27,
+      17,
+      0,
+      19,
+      0,
+      "IMAGE"
+    ],
+    [
+      29,
+      19,
+      0,
+      20,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": {
+        "0": 367.79296875,
+        "1": 77.46484375
+      }
+    },
+    "ue_links": []
+  },
+  "version": 0.4
+}
